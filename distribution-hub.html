@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luminary Ventures — Deterministic Real Estate Underwriting</title>
+<style>
+:root {
+  --bg: #0a0c14;
+  --surface: #131627;
+  --border: #252840;
+  --text: #e4e6f0;
+  --muted: #7a7e95;
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --radius: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+.container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+
+/* Header */
+header { text-align: center; padding: 48px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+.badge { display: inline-block; background: rgba(59,130,246,0.12); color: var(--blue); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; margin-bottom: 16px; letter-spacing: 0.5px; text-transform: uppercase; }
+header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+header p { color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 1.05rem; }
+
+/* Sections */
+.section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; }
+.section h3 { font-size: 1.1rem; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 8px; }
+
+/* Market Grid */
+.market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.market-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; transition: border-color 0.2s; cursor: default; }
+.market-card:hover { border-color: var(--blue); }
+.market-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
+.market-metrics { display: flex; gap: 12px; flex-wrap: wrap; }
+.metric-chip { font-size: 0.75rem; color: var(--muted); background: rgba(255,255,255,0.04); padding: 3px 8px; border-radius: 4px; }
+
+/* Deal Previews */
+.deal-preview { background: var(--bg); border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid var(--green); }
+.deal-preview.negative { border-left-color: var(--red); }
+.deal-preview.mixed { border-left-color: var(--amber); }
+.deal-type { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.deal-verdict { font-weight: 600; font-size: 0.92rem; margin-bottom: 8px; }
+.deal-metrics { display: flex; gap: 16px; font-size: 0.85rem; color: var(--muted); }
+.deal-metrics span { white-space: nowrap; }
+
+/* Social Previews */
+.social-box { background: var(--bg); border-radius: 8px; padding: 16px; margin-bottom: 12px; position: relative; }
+.social-platform { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.social-text { font-size: 0.92rem; line-height: 1.5; white-space: pre-wrap; color: var(--text); }
+.copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(59,130,246,0.15); color: var(--blue); border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
+.copy-btn:hover { background: rgba(59,130,246,0.25); }
+
+/* CTA Section */
+.cta-section { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 32px; }
+.cta-button { display: inline-block; background: var(--blue); color: #fff; padding: 14px 32px; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.2s; margin: 0 8px; }
+.cta-button:hover { background: #2563eb; transform: translateY(-1px); }
+.cta-secondary { display: inline-block; color: var(--muted); padding: 14px 32px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; border: 1px solid var(--border); margin: 0 8px; transition: all 0.2s; }
+.cta-secondary:hover { border-color: var(--blue); color: var(--text); }
+
+/* Footer */
+footer { text-align: center; padding: 32px 0; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  header h1 { font-size: 1.5rem; }
+  .market-grid { grid-template-columns: 1fr; }
+  .deal-metrics { flex-direction: column; gap: 4px; }
+}
+
+/* Copy feedback */
+.copied { background: rgba(34,197,94,0.2) !important; color: var(--green) !important; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <span class="badge">Luminary Ventures · Deterministic Underwriting Engine</span>
+  <h1>Deterministic Real Estate Underwriting</h1>
+  <p>No black-box AI guesses. Auditable math across 19 US markets. Built by a 20-year developer/CFO with $4B+ portfolio experience.</p>
+</header>
+
+<!-- Live Tools -->
+<div class="section">
+  <h3>🔗 Live Tools — Try Them Now</h3>
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+    <a href="https://dereviankoandrey.github.io/luminary-flash-analyses/" class="cta-button" target="_blank">Flash Analysis (19 Markets)</a>
+    <a href="https://dereviankoandrey.github.io/luminary-deal-scoring-matrix/" class="cta-secondary" target="_blank">Deal Scoring Matrix</a>
+    <a href="https://dereviankoandrey.github.io/luminary-flash-analyses/" class="cta-secondary" target="_blank">Chrome Extension Demo</a>
+  </div>
+</div>
+
+<!-- Market Summary -->
+<div class="section">
+  <h3>📊 Markets Analyzed — 19 Metro Areas</h3>
+  <p style="color:var(--muted); font-size:0.88rem; margin-bottom:16px;">All three deal types (fix-and-flip, multifamily, buy-and-hold) independently analyzed per market.</p>
+  <div class="market-grid">
+
+    <div class="market-card">
+      <div class="market-name">Dallas-Fort Worth</div>
+      <div class="market-metrics"><span class="metric-chip">#1 Flash Analysis</span><span class="metric-chip">Strong flip market</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">San Antonio</div>
+      <div class="market-metrics"><span class="metric-chip">Capital efficient</span><span class="metric-chip">Tax advantage</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Nashville</div>
+      <div class="market-metrics"><span class="metric-chip">Multifamily strong</span><span class="metric-chip">$4B+ portfolio tested</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Miami</div>
+      <div class="market-metrics"><span class="metric-chip">Insurance drag analyzed</span><span class="metric-chip">Migration +6%</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Charlotte</div>
+      <div class="market-metrics"><span class="metric-chip">3.8mo inventory deficit</span><span class="metric-chip">Flip fundamentals strong</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Phoenix</div>
+      <div class="market-metrics"><span class="metric-chip">Supply constraints</span><span class="metric-chip">Migration inflow</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Austin (Home Market)</div>
+      <div class="market-metrics"><span class="metric-chip">Flip: CONDITIONAL GO</span><span class="metric-chip">Multifamily 8-unit: STRONG</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">DC-Arlington</div>
+      <div class="market-metrics"><span class="metric-chip">Federal employment base</span><span class="metric-chip">Low vacancy risk</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Houston</div>
+      <div class="market-metrics"><span class="metric-chip">No state income tax</span><span class="metric-chip">Energy sector pivot</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Las Vegas</div>
+      <div class="metric-metrics"><span class="metric-chip">$275K duplex = 8.2% cap</span><span class="metric-chip">Tax rate 0.69%</span></div>
+    </div>
+
+    <!-- Additional markets referenced in flash analysis pipeline -->
+    <div class="market-card">
+      <div class="market-name">Atlanta</div>
+      <div class="market-metrics"><span class="metric-chip">Migration leader</span><span class="metric-chip">Affordable entry points</span></div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-name">Tampa</div>
+      <div class="market-metrics"><span class="metric-chip">Insurance analysis included</span><span class="metric-chip">Population growth</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Sample Deal Analysis -->
+<div class="section">
+  <h3>📋 Sample Results — What You Get</h3>
+
+  <div class="deal-preview">
+    <div class="deal-type">Dallas-Fort Worth · Multifamily · 12-Unit</div>
+    <div class="deal-verdict" style="color:var(--green);">✅ GO STRONG — Cash flow exceeds threshold by 34%</div>
+    <div class="deal-metrics">
+      <span>Cap Rate: 9.8%</span>
+      <span>Cash-on-Cash: 14.2%</span>
+      <span>DSCR: 1.52</span>
+      <span>IRR (5yr): 22.1%</span>
+    </div>
+  </div>
+
+  <div class="deal-preview mixed">
+    <div class="deal-type">Austin · Fix-and-Flip · $485K Purchase</div>
+    <div class="deal-verdict" style="color:var(--amber);">⚠️ CONDITIONAL GO — Depends on ARV and renovation timeline</div>
+    <div class="deal-metrics">
+      <span>Cap Rate: 6.1%</span>
+      <span>Cash-on-Cash: 8.7%</span>
+      <span>DSCR: 1.08</span>
+      <span>Margin: 4.2% (tight)</span>
+    </div>
+  </div>
+
+  <div class="deal-preview negative">
+    <div class="deal-type">Miami · Buy-and-Hold · Duplex Entry</div>
+    <div class="deal-verdict" style="color:var(--red);">❌ NO-GO — Insurance drag eliminates margin</div>
+    <div class="deal-metrics">
+      <span>Cap Rate: 5.4%</span>
+      <span>Cash-on-Cash: 3.1%</span>
+      <span>DSCR: 0.92 (below threshold)</span>
+      <span>Insurance: $6,800/yr</span>
+    </div>
+  </div>
+
+  <p style="color:var(--muted); font-size:0.85rem; margin-top:16px;">Each deal analysis includes: full pro forma (5-year), scenario modeling, risk tiering, due diligence checklist, and market context.</p>
+</div>
+
+<!-- Pre-Written Social Posts -->
+<div class="section">
+  <h3>📱 Ready-to-Share Posts — Copy/Paste & Send</h3>
+
+  <div class="social-box">
+    <button class="copy-btn" onclick="copyText(this, 'linkedin')">Copy</button>
+    <div class="social-platform">LinkedIn (Operator-first narrative)</div>
+    <div class="social-text" id="linkedin-post">After 20 years as a developer and CFO managing $4B+ portfolios, I've seen what makes deals work — it's not gut feel, it's math that doesn't lie.
+
+I built a deterministic underwriting engine that analyzes properties across 19 US markets. No black-box AI guesses. Just auditable numbers.
+
+Try it on any market: https://dereviankoandrey.github.io/luminary-flash-analyses/
+
+Curious which markets are actually worth investing in right now?</div>
+  </div>
+
+  <div class="social-box">
+    <button class="copy-btn" onclick="copyText(this, 'email')">Copy</button>
+    <div class="social-platform">Email to Warm Contact</div>
+    <div class="social-text" id="email-post">Subject: Quick question about [City] real estate
+
+Hey [Name],
+
+I built a tool that runs deterministic underwriting across 19 US markets — no AI guesswork, just auditable math. 
+
+Try it on any market here: https://dereviankoandrey.github.io/luminary-flash-analyses/
+
+If you're looking at deals in [City/Metro], run the numbers and let me know what you think. Happy to walk through the methodology if useful.
+
+Best,
+Andrey</div>
+  </div>
+
+  <div class="social-box">
+    <button class="copy-btn" onclick="copyText(this, 'twitter')">Copy</button>
+    <div class="social-platform">Twitter/X (Short form)</div>
+    <div class="social-text" id="twitter-post">Built a deterministic real estate underwriting tool that analyzes 19 US markets with auditable math — no AI black boxes. 
+
+Try it: https://dereviankoandrey.github.io/luminary-flash-analyses/
+
+#realestate #investing #underwriting</div>
+  </div>
+
+  <div class="social-box">
+    <button class="copy-btn" onclick="copyText(this, 'reddit')">Copy</button>
+    <div class="social-platform">Reddit (r/realestate / r/investing — value-first)</div>
+    <div class="social-text" id="reddit-post">I spent 20 years as a developer and CFO managing $4B+ in real estate portfolios. What I noticed: most deal analysis is either spreadsheet guesswork or AI that hallucinates numbers.
+
+So I built something deterministic — math you can audit line by line, across 19 US markets. No black boxes.
+
+Free tool here if anyone wants to test it on their local market: https://dereviankoandrey.github.io/luminary-flash-analyses/
+
+Happy to walk through the methodology or answer questions about specific deals.</div>
+  </div>
+</div>
+
+<!-- Product Suite -->
+<div class="section">
+  <h3>🧰 Full Product Suite</h3>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:14px;">
+    <div style="background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-weight:600; margin-bottom:6px;">Flash Analysis</div>
+      <div style="color:var(--muted); font-size:0.85rem;">19 markets, 3 deal types each. Free.</div>
+    </div>
+    <div style="background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-weight:600; margin-bottom:6px;">Deal Scoring Matrix</div>
+      <div style="color:var(--muted); font-size:0.85rem;">Weighted criteria scoring tool.</div>
+    </div>
+    <div style="background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-weight:600; margin-bottom:6px;">Deal Toolkit</div>
+      <div style="color:var(--muted); font-size:0.85rem;">3 templates + 3 examples ($47).</div>
+    </div>
+    <div style="background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-weight:600; margin-bottom:6px;">Chrome Extension</div>
+      <div style="color:var(--muted); font-size:0.85rem;">Overlay GO/NO-GO on Zillow & Redfin.</div>
+    </div>
+    <div style="background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-weight:600; margin-bottom:6px;">DD Reports</div>
+      <div style="color:var(--muted); font-size:0.85rem;">Custom reports $197–$497.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <p style="margin-bottom:20px; color:var(--muted); font-size:0.95rem;">Built by Andrey Derevianko · Operator-first, math-driven deterministic underwriting</p>
+  <a href="https://dereviankoandrey.github.io/luminary-flash-analyses/" class="cta-button" target="_blank">Try Flash Analysis Now</a>
+  <a href="https://dereviankoandrey.github.io/luminary-deal-scoring-matrix/" class="cta-secondary" target="_blank">Extension Demo</a>
+</div>
+
+<footer>
+  Luminary Ventures · Deterministic Underwriting Engine<br/>
+  All analysis uses auditable math. Every number traceable to source assumptions.<br/>
+  © 2026 Andrey Derevianko
+</footer>
+
+</div>
+
+<script>
+function copyText(btn, id) {
+  const map = {
+    'linkedin': 'linkedin-post',
+    'email': 'email-post',
+    'twitter': 'twitter-post',
+    'reddit': 'reddit-post'
+  };
+  const text = document.getElementById(map[id]).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>

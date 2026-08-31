@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminary Outreach Tracker — DealAudit Pro Pipeline</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --accent: #3b82f6;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+  h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; min-width: 100px; text-align: center; }
+  .stat-value { font-size: 1.5rem; font-weight: 700; }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+  .controls { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  button { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: opacity 0.2s; }
+  button:hover { opacity: 0.9; }
+  button.secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  button.danger { background: transparent; border: 1px solid var(--red); color: var(--red); }
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-btn { padding: 6px 12px; font-size: 0.75rem; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; position: sticky; top: 0; background: var(--bg); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover { background: rgba(59,130,246,0.04); }
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .status-new { background: rgba(59,130,246,0.15); color: var(--accent); }
+  .status-sent { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .status-responded { background: rgba(34,197,94,0.15); color: var(--green); }
+  .status-lost { background: rgba(239,68,68,0.15); color: var(--red); }
+  .priority-high { border-left: 3px solid var(--accent); padding-left: 10px !important; }
+  .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+  .action-btn { font-size: 0.7rem; padding: 4px 8px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 3px; cursor: pointer; }
+  .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; padding: 24px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; padding: 24px; }
+  .modal h2 { font-size: 1.1rem; margin-bottom: 20px; }
+  label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; margin-top: 16px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.85rem; font-family: inherit; }
+  textarea { resize: vertical; min-height: 80px; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 24px; justify-content: flex-end; }
+  .response-template { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-size: 0.8rem; color: var(--text); white-space: pre-wrap; margin-top: 8px; line-height: 1.5; }
+  .response-template code { background: rgba(59,130,246,0.1); padding: 1px 4px; border-radius: 3px; font-size: 0.75rem; color: var(--accent); }
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+  .empty-state h3 { margin-bottom: 8px; color: var(--text); }
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    th, td { font-size: 0.75rem; padding: 8px; }
+    .stat-card { min-width: 80px; padding: 8px 12px; }
+    .stat-value { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>Luminary Outreach Tracker</h1>
+      <div class="subtitle">DealAudit Pro Pipeline — Track, Follow Up, Close</div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="controls">
+    <button onclick="openAddModal()">+ Add Contact</button>
+    <button class="secondary" onclick="exportData()">Export CSV</button>
+    <button class="secondary" onclick="importPrompt()">Import</button>
+    <input type="file" id="importFile" accept=".csv,.json" style="display:none" onchange="handleImport(event)">
+    <button class="danger" onclick="clearAll()" style="margin-left:auto">Reset All</button>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" data-filter="new" onclick="setFilter('new', this)">New</button>
+    <button class="filter-btn" data-filter="sent" onclick="setFilter('sent', this)">Sent</button>
+    <button class="filter-btn" data-filter="responded" onclick="setFilter('responded', this)">Responded</button>
+    <button class="filter-btn" data-filter="lost" onclick="setFilter('lost', this)">Lost</button>
+  </div>
+
+  <div style="overflow-x: auto;">
+    <table id="contactsTable">
+      <thead>
+        <tr>
+          <th>Name / Company</th>
+          <th>Channel</th>
+          <th>Product Interest</th>
+          <th>Status</th>
+          <th>Last Contact</th>
+          <th>Follow-up</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="contactsBody"></tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display:none">
+    <h3>No contacts yet</h3>
+    <p>Add your first warm contact to start tracking outreach.</p>
+  </div>
+</div>
+
+<!-- Add Contact Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h2>Add New Contact</h2>
+    <label>Name *</label>
+    <input type="text" id="f_name" placeholder="Full name or company">
+    <label>Email / LinkedIn URL (optional)</label>
+    <input type="text" id="f_contact" placeholder="email@example.com or https://linkedin.com/in/...">
+    <label>Channel *</label>
+    <select id="f_channel">
+      <option value="">Select channel...</option>
+      <option value="Email">Email</option>
+      <option value="LinkedIn">LinkedIn</option>
+      <option value="Twitter/X">Twitter / X</option>
+      <option value="Referral">Referral (warm intro)</option>
+      <option value="Phone">Phone call</option>
+    </select>
+    <label>Product Interest *</label>
+    <select id="f_product">
+      <option value="">Select product...</option>
+      <option value="Flash Analysis">Flash Deal Analysis (Free)</option>
+      <option value="Deal Toolkit">Deal Analysis Toolkit ($47)</option>
+      <option value="DD Reports">DD Reports ($197–$497)</option>
+      <option value="Underwriting SaaS">AI Underwriting SaaS</option>
+      <option value="Bundle">Full Bundle (All Products)</option>
+    </select>
+    <label>Source / How you know them</label>
+    <input type="text" id="f_source" placeholder="e.g., 'Met at BMA 2019', 'LinkedIn connection'">
+    <label>Priority</label>
+    <select id="f_priority">
+      <option value="high">High — warmest relationship</option>
+      <option value="medium" selected>Medium — some history</option>
+      <option value="low">Low — cold but relevant</option>
+    </select>
+    <label>Notes (optional)</label>
+    <textarea id="f_notes" placeholder="Context that might help during outreach..."></textarea>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('addModal')">Cancel</button>
+      <button onclick="saveContact()">Save Contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- Response Template Modal -->
+<div class="modal-overlay" id="responseModal">
+  <div class="modal">
+    <h2 id="responseTitle">Response Templates</h2>
+    <div id="responseContent"></div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('responseModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'luminary_outreach_v1';
+let contacts = [];
+let currentFilter = 'all';
+
+// Response templates for common scenarios
+const responseTemplates = {
+  interested: `<strong>"Interested — tell me more"</strong>
+→ Reply within 2 hours. Send the <code>deal-analysis-suite-demo-austin-4unit.md</code> sample link + one-liner pricing.
+→ "Great to hear from you. Here's a sample analysis we produced for an Austin multifamily deal: [link]. We're currently offering beta access at $197/report with full market context + deterministic underwriting math. Want me to run your next deal through the pipeline?"`,
+
+  pricing_pushback: `<strong>"Too expensive"</strong>
+→ Anchor on value, not price. Reference their specific deal type and typical due diligence costs.
+→ "I understand — most investors tell us that before they see one report. A single missed issue in a $2M multifamily deal costs more than 10 DD Reports. We're doing beta pricing at $197/report (vs. $5K+ for traditional underwriting) because we want case studies, not revenue right now. What's the next deal you're evaluating?"`,
+
+  send_numbers: `<strong>"Send me your numbers"</strong>
+→ This is a hot lead. Respond immediately with intake form + sample.
+→ "Absolutely — here's our intake form: [link]. Fill in whatever you have and we'll produce a full DD report within 24 hours. Here's what one looks like for reference: [sample link]. No commitment, just see if the output matches what you need."`,
+
+  not_now: `<strong>"Not right now"</strong>
+→ Don't push. Leave door open + set follow-up date.
+→ "No problem at all — I'll circle back in a few months when things shift. In the meantime, our Flash Deal Analysis tool is free and live at [link] if you want to see the output quality. Happy to help whenever you're evaluating deals."`,
+
+  referral_request: `<strong>"Do you know anyone else?"</strong>
+→ This means they liked it. Ask for specific names, not "anyone."
+→ "Glad it resonated. I'm building my beta test group — do you have 2-3 fellow investors who are actively evaluating deals right now? Even one warm intro would be huge. Happy to send them a free flash analysis as an introduction so there's zero pressure."`,
+
+  competitor_ask: `<strong>"How is this different from [DealCheck/PropStream/etc]?"</strong>
+→ Position on determinism + operator credibility.
+→ "Great question. Tools like DealCheck give you cap rates and basic projections — they're calculators. We produce full investor-grade DD reports with multi-scenario pro formas, market context from live data feeds, risk tiering, and due diligence checklists. The key difference: our math is deterministic (auditable), not probabilistic. Every output can be traced line-by-line. Think of it the difference between a spreadsheet and an analyst."`
+};
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    contacts = raw ? JSON.parse(raw) : [];
+  } catch(e) { contacts = []; }
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+}
+
+function render() {
+  // Stats
+  const total = contacts.length;
+  const newCount = contacts.filter(c => c.status === 'new').length;
+  const sentCount = contacts.filter(c => c.status === 'sent').length;
+  const respondedCount = contacts.filter(c => c.status === 'responded').length;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--accent)">${newCount}</div><div class="stat-label">New</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">${sentCount}</div><div class="stat-label">Sent</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--green)">${respondedCount}</div><div class="stat-label">Replied</div></div>
+  `;
+
+  // Filter
+  const filtered = currentFilter === 'all' ? contacts : contacts.filter(c => c.status === currentFilter);
+
+  // Sort: high priority first, then by follow-up date (soonest first)
+  const priorityOrder = { high: 0, medium: 1, low: 2 };
+  filtered.sort((a, b) => {
+    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) return priorityOrder[a.priority] - priorityOrder[b.priority];
+    return new Date(a.followUp) - new Date(b.followUp);
+  });
+
+  const tbody = document.getElementById('contactsBody');
+  const emptyState = document.getElementById('emptyState');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    emptyState.style.display = 'block';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  tbody.innerHTML = filtered.map((c, i) => {
+    const statusClass = `status-${c.status}`;
+    const statusLabel = { new: 'New', sent: 'Sent', responded: 'Replied', lost: 'Lost' }[c.status];
+    const priorityClass = c.priority === 'high' ? 'priority-high' : '';
+    const today = new Date().toISOString().split('T')[0];
+
+    return `<tr class="${priorityClass}">
+      <td><strong>${esc(c.name)}</strong>${c.source ? '<br><span style="color:var(--muted);font-size:0.75rem">' + esc(c.source) + '</span>' : ''}</td>
+      <td>${esc(c.channel)}</td>
+      <td>${esc(c.product)}</td>
+      <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+      <td style="white-space:nowrap;font-size:0.8rem">${c.lastContact || '—'}</td>
+      <td style="white-space:nowrap;font-size:0.8rem;color:${c.followUp <= today ? 'var(--red)' : ''}">${c.followUp || '—'}</td>
+      <td class="actions-cell">
+        ${statusNext(c)}
+        <button class="action-btn" onclick="showResponse('${esc(c.product)}')">Templates</button>
+        <button class="action-btn danger" onclick="deleteContact(${i})">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function statusNext(c) {
+  if (c.status === 'new') return `<button class="action-btn" onclick="advanceStatus(${contacts.indexOf(c)}, 'sent')">Mark Sent</button>`;
+  if (c.status === 'sent') return `<button class="action-btn" onclick="advanceStatus(${contacts.indexOf(c)}, 'responded')">Replied</button><button class="action-btn" onclick="advanceStatus(${contacts.indexOf(c)}, 'lost')">Lost</button>`;
+  if (c.status === 'responded') return `<button class="action-btn" onclick="advanceStatus(${contacts.indexOf(c)}, 'sent')">Follow Up Again</button>`;
+  return '';
+}
+
+function advanceStatus(idx, newStatus) {
+  contacts[idx].status = newStatus;
+  contacts[idx].lastContact = new Date().toISOString().split('T')[0];
+  if (newStatus === 'responded') {
+    const d = new Date(); d.setDate(d.getDate() + 7);
+    contacts[idx].followUp = d.toISOString().split('T')[0];
+  } else if (newStatus === 'sent' && contacts[idx].status !== 'sent') {
+    // keep existing follow-up or set 3 days
+    if (!contacts[idx].followUp) { const d = new Date(); d.setDate(d.getDate() + 3); contacts[idx].followUp = d.toISOString().split('T')[0]; }
+  } else if (newStatus === 'lost') {
+    contacts[idx].followUp = '';
+  }
+  saveData(); render();
+}
+
+function deleteContact(idx) {
+  if (!confirm('Delete this contact?')) return;
+  contacts.splice(idx, 1);
+  saveData(); render();
+}
+
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function setFilter(f, btn) { currentFilter = f; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); render(); }
+
+function saveContact() {
+  const name = document.getElementById('f_name').value.trim();
+  const channel = document.getElementById('f_channel').value;
+  const product = document.getElementById('f_product').value;
+  if (!name || !channel || !product) { alert('Name, Channel, and Product Interest are required.'); return; }
+
+  const contact = {
+    id: Date.now(),
+    name,
+    contact: document.getElementById('f_contact').value.trim(),
+    channel,
+    product,
+    source: document.getElementById('f_source').value.trim(),
+    priority: document.getElementById('f_priority').value,
+    notes: document.getElementById('f_notes').value.trim(),
+    status: 'new',
+    lastContact: '',
+    followUp: '',
+    createdAt: new Date().toISOString()
+  };
+
+  contacts.push(contact);
+  saveData(); render(); closeModal('addModal');
+
+  // Clear form
+  ['f_name','f_contact','f_source','f_notes'].forEach(id => document.getElementById(id).value = '');
+  ['f_channel','f_product'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  document.getElementById('f_priority').selectedIndex = 1;
+}
+
+function showResponse(product) {
+  const title = product + ' — Response Templates';
+  document.getElementById('responseTitle').textContent = title;
+
+  let html = '';
+  for (const [key, template] of Object.entries(responseTemplates)) {
+    const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    html += `<h3 style="font-size:0.85rem;margin-top:16px;color:var(--accent)">${label}</h3>`;
+    html += `<div class="response-template">${template}</div>`;
+  }
+
+  document.getElementById('responseContent').innerHTML = html;
+  document.getElementById('responseModal').classList.add('open');
+}
+
+function exportData() {
+  if (contacts.length === 0) return alert('No contacts to export.');
+  const headers = ['Name','Email/Contact','Channel','Product','Status','Source','Priority','Notes','Last Contact','Follow Up'];
+  const rows = contacts.map(c => [c.name, c.contact, c.channel, c.product, c.status, c.source, c.priority, c.notes, c.lastContact, c.followUp]);
+  const csv = [headers, ...rows].map(r => r.map(v => '"' + (v||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `luminary_outreach_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importPrompt() { document.getElementById('importFile').click(); }
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      if (file.name.endsWith('.json')) {
+        const imported = JSON.parse(e.target.result);
+        contacts = [...contacts, ...imported];
+      } else {
+        // Simple CSV import
+        const lines = e.target.result.split('\n').filter(l => l.trim());
+        const headers = lines[0].split(',').map(h => h.replace(/"/g,''));
+        for (let i = 1; i < lines.length; i++) {
+          const vals = parseCSVLine(lines[i]);
+          if (vals.length >= 2) {
+            contacts.push({
+              id: Date.now() + i,
+              name: vals[0] || '',
+              contact: vals[1] || '',
+              channel: vals[2] || '',
+              product: vals[3] || '',
+              status: vals[4] || 'new',
+              source: vals[5] || '',
+              priority: vals[6] || 'medium',
+              notes: vals[7] || '',
+              lastContact: vals[8] || '',
+              followUp: vals[9] || '',
+              createdAt: new Date().toISOString()
+            });
+          }
+        }
+      }
+      saveData(); render();
+    } catch(err) { alert('Import failed: ' + err.message); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function parseCSVLine(line) {
+  const result = []; let current = ''; let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQuotes = !inQuotes; }
+    else if (line[i] === ',' && !inQuotes) { result.push(current); current = ''; }
+    else { current += line[i]; }
+  }
+  result.push(current);
+  return result.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"'));
+}
+
+function clearAll() {
+  if (!confirm('Delete ALL contacts? This cannot be undone.')) return;
+  contacts = []; saveData(); render();
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+// Init
+loadData(); render();
+</script>
+</body>
+</html>

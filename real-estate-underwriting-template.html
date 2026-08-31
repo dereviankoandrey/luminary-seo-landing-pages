@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Estate Underwriting Template — Professional Deal Analysis Framework | Luminary Ventures</title>
+  <meta name="description" content="Free real estate underwriting template used by professional developers. Analyze fix-and-flip, buy-and-hold, and multifamily deals with deterministic thresholds that eliminate gut-feel investing.">
+  <meta name="keywords" content="real estate underwriting template, property investment analysis framework, deal underwriting checklist, professional real estate evaluation, real estate due diligence template, underwriting standards for investors">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; background: #fafafa; }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    header { text-align: center; padding: 60px 20px 40px; border-bottom: 1px solid #e5e5e5; margin-bottom: 48px; }
+    h1 { font-size: 2.2rem; color: #0a0a0a; margin-bottom: 12px; line-height: 1.3; }
+    .subtitle { font-size: 1.15rem; color: #555; max-width: 600px; margin: 0 auto; }
+    h2.section-title { font-size: 1.4rem; margin-bottom: 16px; color: #0a0a0a; margin-top: 48px; }
+    p { color: #444; margin-bottom: 16px; }
+    .template-section { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 28px; margin-bottom: 32px; }
+    .template-section h3 { font-size: 1.1rem; color: #0a0a0a; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .threshold-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .threshold-table th, .threshold-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    .threshold-table th { background: #f5f5f5; font-weight: 600; color: #333; }
+    .threshold-table tr:hover { background: #fafafa; }
+    .green { color: #2e7d32; font-weight: 600; }
+    .orange { color: #ef6c00; font-weight: 600; }
+    .red { color: #c62828; font-weight: 600; }
+    .operator-note { background: #f5f5f5; border-left: 4px solid #333; padding: 20px; margin: 32px 0; border-radius: 0 8px 8px 0; }
+    .operator-note h3 { font-size: 1rem; color: #0a0a0a; margin-bottom: 8px; }
+    .operator-note p { font-size: 0.9rem; margin-bottom: 8px; }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 10px 0 10px 32px; border-bottom: 1px solid #eee; position: relative; font-size: 0.95rem; color: #444; }
+    .checklist li::before { content: "☐"; position: absolute; left: 8px; top: 10px; font-size: 1.1rem; color: #666; }
+    .cta-section { background: #0a0a0a; color: white; text-align: center; padding: 48px 32px; border-radius: 12px; margin: 48px 0; }
+    .cta-section h2 { font-size: 1.5rem; margin-bottom: 12px; }
+    .cta-section p { color: #ccc; max-width: 500px; margin: 0 auto 24px; }
+    .btn-cta { background: white; color: #0a0a0a; border: none; padding: 14px 32px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-cta:hover { background: #f5f5f5; }
+    footer { text-align: center; padding: 40px 20px; border-top: 1px solid #e5e5e5; color: #999; font-size: 0.85rem; }
+    .highlight-box { background: #f0f7ff; border: 1px solid #b3d4fc; padding: 20px; border-radius: 8px; margin: 24px 0; }
+    .highlight-box h4 { font-size: 0.95rem; color: #1565c0; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Real Estate Underwriting Template</h1>
+      <p class="subtitle">The exact framework professional developers use to evaluate every deal. Free, deterministic, and auditable — no gut feeling required.</p>
+    </header>
+
+    <div class="template-section">
+      <h3>📊 Section 1: Deal Parameters</h3>
+      <table class="threshold-table">
+        <tr><th>Metric</th><th>Your Input</th><th>Minimum Acceptable</th></tr>
+        <tr><td>Purchase Price</td><td>$__________</td><td>—</td></tr>
+        <tr><td>After Repair Value (ARV)</td><td>$__________</td><td>Based on 3+ comparable sales within 0.5 miles, sold in last 90 days</td></tr>
+        <tr><td>Renovation Budget</td><td>$__________</td><td>Get 3 contractor bids minimum</td></tr>
+        <tr><td>Holding Period (months)</td><td>_______</td><td>Flip: ≤6 months | Buy-and-hold: indefinite</td></tr>
+        <tr><td>Monthly Rent (if applicable)</td><td>$__________</td><td>Based on 3+ comparable rentals within 0.5 miles</td></tr>
+      </table>
+    </div>
+
+    <div class="template-section">
+      <h3>📈 Section 2: Return Thresholds</h3>
+      <p style="font-size: 0.9rem; color: #666;">These are the minimum thresholds I use across every deal type. No exceptions, no "this time it's different." If a deal doesn't clear these bars, it gets rejected — even if everything else looks good.</p>
+      <table class="threshold-table">
+        <tr><th>Metric</th><th style="color: #2e7d32;">GO (Proceed)</th><th style="color: #ef6c00;">REVIEW (Re-evaluate)</th><th style="color: #c62828;">NO-GO (Reject)</th></tr>
+        <tr><td>Flip ROI</td><td class="green">≥ 20%</td><td class="orange">10% – 19.9%</td><td class="red">< 10%</td></tr>
+        <tr><td>Buy-and-Hold Cash Flow</td><td class="green">≥ $300/month</td><td class="orange">$0 – $299/month</td><td class="red">Negative cash flow</td></tr>
+        <tr><td>Cap Rate (Multifamily)</td><td class="green">≥ 8%</td><td class="orange">6% – 7.9%</td><td class="red">< 6%</td></tr>
+        <tr><td>DSCR</td><td class="green">≥ 1.25x</td><td class="orange">1.0 – 1.24x</td><td class="red">< 1.0x</td></tr>
+        <tr><td>LTV (Purchase)</td><td class="green">≤ 75%</td><td class="orange">76% – 80%</td><td class="red">> 80%</td></tr>
+      </table>
+    </div>
+
+    <div class="template-section">
+      <h3>🔍 Section 3: Due Diligence Checklist</h3>
+      <p style="font-size: 0.9rem; color: #666;">Complete every item before committing capital. Skipping even one is how deals go sideways.</p>
+      <ul class="checklist">
+        <li><strong>Zoning verification:</strong> Confirm current zoning allows intended use. Check for pending changes in the district.</li>
+        <li><strong>Title search:</strong> No liens, encumbrances, or ownership disputes. Order a commitment 48 hours before closing.</li>
+        <li><strong>Structural inspection:</strong> Licensed inspector, not the seller's contractor. Foundation, roof, electrical, plumbing.</li>
+        <li><strong>Rental comparables (if applicable):</strong> 3+ active and recently leased units within 0.5 miles confirming rent assumptions.</li>
+        <li><strong>Sales comparables:</strong> 3+ comparable sales within 0.5 miles, sold in last 90 days, adjusted for differences.</li>
+        <li><strong>Environmental assessment:</strong> Phase I if multifamily or commercial. Phase II if any red flags identified.</li>
+        <li><strong>Permit history:</strong> Check county records for open permits, code violations, or unpermitted work.</li>
+        <li><strong>Insurance quotes:</strong> Get actual quotes before underwriting — insurance costs vary dramatically by location and property type.</li>
+      </ul>
+    </div>
+
+    <div class="template-section">
+      <h3>⚖️ Section 4: Risk Assessment Matrix</h3>
+      <table class="threshold-table">
+        <tr><th>Risk Factor</th><th>Low Risk (1-2)</th><th>Medium Risk (3-5)</th><th>High Risk (6+)</th></tr>
+        <tr><td>Market volatility</td><td>Stable or appreciating market, population growth > 0.5%</td><td>Moderate fluctuations, flat to slightly declining values</td><td>Rapidly declining values, negative net migration</td></tr>
+        <tr><td>Liquidity risk</td><td>Average DOM < 45 days, high transaction volume</td><td>Average DOM 45-90 days</td><td>Average DOM > 90 days, thin market</td></tr>
+        <tr><td>Regulatory risk</td><td>Landlord-friendly jurisdiction, stable regulations</td><td>Mixed regulatory environment, occasional new restrictions</td><td>Tenant-protection heavy, rent control, eviction moratoriums</td></tr>
+      </table>
+    </div>
+
+    <div class="highlight-box">
+      <h4>💡 Key Insight</h4>
+      <p style="margin-bottom: 0; font-size: 0.9rem;">MIT Sloan published research in 2026 showing that structured, deterministic approaches produce significantly better financial outcomes than unstructured analysis — whether you're using AI or a spreadsheet. The principle is the same: clear thresholds beat vague gut feelings every time.</p>
+    </div>
+
+    <div class="operator-note">
+      <h3>From a 20-Year Operator</h3>
+      <p>"I've seen deals that 'felt right' and lost money, and deals that passed every threshold but still failed because someone skipped one line of due diligence. The framework doesn't guarantee success — but skipping it guarantees you'll find out what you missed when it's too late."</p>
+      <p style="font-size: 0.85rem; color: #666;">— Andrey Derevianko, Real Estate Developer & CFO</p>
+    </div>
+
+    <div class="cta-section">
+      <h2>Get the Complete Deal Analysis Toolkit</h2>
+      <p>This is a preview. The full toolkit includes three operator-grade templates: a Deal Scoring Matrix, Financing Comparison Worksheet, and Due Diligence Checklist — all in printable format.</p>
+      <a href="#" class="btn-cta">Download the Full Toolkit — $47</a>
+    </div>
+
+    <footer>
+      <p>Built by Luminary Ventures | Andrey Derevianko</p>
+      <p style="margin-top: 8px;">This template provides general analysis guidance only. Consult a licensed professional before making investment decisions.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
