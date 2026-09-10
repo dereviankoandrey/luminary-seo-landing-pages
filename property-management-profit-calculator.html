@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Management Profit Calculator — Free Tool by Luminary | NOI, Cash-on-Cash & More</title>
+<meta name="description" content="Calculate your true property management profit margins: Net Operating Income, Cash-on-Cash Return, Operating Expense Ratio, Break-Even Occupancy Rate. Free interactive calculator for landlords and PMs.">
+<meta name="keywords" content="property management calculator, property mgmt profit margin, NOI calculator, cash on cash return, operating expense ratio, break even occupancy rate, rental property profit calculator">
+<link rel="canonical" href="https://dereviankoandrey.github.io/luminary-seo-landing-pages/property-management-profit-calculator.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0a0e17;color:#e2e8f0;line-height:1.6}
+.container{max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+header{text-align:center;padding:3rem 0 2rem;border-bottom:1px solid #1e293b;margin-bottom:2.5rem}
+h1{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem;line-height:1.2}
+.subtitle{color:#94a3b8;font-size:1.1rem;max-width:600px;margin:0 auto}
+.badge{display:inline-block;background:#1e3a5f;color:#60a5fa;padding:.25rem .75rem;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:1rem;letter-spacing:.05em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:1.5rem;transition:border-color .2s}
+.card:hover{border-color:#334155}
+.card h2{font-size:1.15rem;color:#60a5fa;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.field{margin-bottom:1rem}
+label{display:block;font-size:.85rem;color:#94a3b8;margin-bottom:.3rem;font-weight:500}
+input[type="number"],select{width:100%;padding:.65rem .85rem;background:#0f172a;border:1px solid #1e293b;border-radius:8px;color:#e2e8f0;font-size:1rem;transition:border-color .2s}
+input[type="number"]:focus,select:focus{outline:none;border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.15)}
+.results-section{background:linear-gradient(135deg,#111827,#1e293b);border:1px solid #334155;border-radius:16px;padding:2rem;margin-bottom:2.5rem}
+.results-section h2{text-align:center;font-size:1.4rem;color:#a78bfa;margin-bottom:1.5rem}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+.metric-card{text-align:center;padding:1.2rem;background:#0f172a;border-radius:10px;border:1px solid #1e293b}
+.metric-label{font-size:.8rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem;font-weight:600}
+.metric-value{font-size:1.8rem;font-weight:800;transition:color .3s}
+.metric-sub{font-size:.75rem;color:#64748b;margin-top:.2rem}
+.positive{color:#34d399}.negative{color:#f87171}.neutral{color:#60a5fa}.warning{color:#fbbf24}
+.cta-section{text-align:center;padding:2.5rem 2rem;background:#111827;border:1px solid #1e293b;border-radius:12px;margin-top:2rem}
+.cta-section h3{font-size:1.3rem;color:#e2e8f0;margin-bottom:.8rem}
+.cta-section p{color:#94a3b8;margin-bottom:1.5rem;max-width:500px;margin-left:auto;margin-right:auto;font-size:.95rem}
+.btn-primary{display:inline-block;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#fff;padding:.85rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:1.05rem;transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(96,165,250,.3)}
+.btn-secondary{display:inline-block;background:transparent;border:1px solid #334155;color:#94a3b8;padding:.7rem 1.5rem;border-radius:8px;text-decoration:none;font-size:.9rem;margin-left:.75rem;transition:border-color .2s,color .2s}
+.btn-secondary:hover{border-color:#60a5fa;color:#e2e8f0}
+.info-box{background:#0f172a;border-left:3px solid #60a5fa;padding:1rem 1.2rem;border-radius:0 8px 8px 0;margin-top:1.5rem;font-size:.9rem;color:#cbd5e1}
+footer{text-align:center;padding:2rem 0;color:#475569;font-size:.8rem;border-top:1px solid #1e293b;margin-top:3rem}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<span class="badge">Free Tool by Luminary</span>
+<h1>Property Management Profit Calculator</h1>
+<p class="subtitle">Calculate your true profit margins in 60 seconds. NOI, Cash-on-Cash Return, Operating Expense Ratio & more — all deterministic, no fluff.</p>
+</header>
+
+<div class="grid">
+<!-- Revenue Inputs -->
+<div class="card">
+<h2>📈 Monthly Revenue</h2>
+<div class="field">
+<label for="grossRent">Gross Rental Income ($/mo)</label>
+<input type="number" id="grossRent" value="8000" min="0" step="100">
+</div>
+<div class="field">
+<label for="otherIncome">Other Income (late fees, parking, etc.) ($/yr)</label>
+<input type="number" id="otherIncome" value="2400" min="0" step="100">
+</div>
+<div class="field">
+<label for="vacancyRate">Vacancy Rate (%)</label>
+<input type="number" id="vacancyRate" value="5" min="0" max="100" step="0.5">
+</div>
+</div>
+
+<!-- Expense Inputs -->
+<div class="card">
+<h2>📉 Monthly Expenses</h2>
+<div class="field">
+<label for="mortgage">Mortgage / Debt Service ($/mo)</label>
+<input type="number" id="mortgage" value="4500" min="0" step="50">
+</div>
+<div class="field">
+<label for="insurance">Insurance ($/mo)</label>
+<input type="number" id="insurance" value="350" min="0" step="10">
+</div>
+<div class="field">
+<label for="propertyTax">Property Tax ($/mo)</label>
+<input type="number" id="propertyTax" value="400" min="0" step="10">
+</div>
+<div class="field">
+<label for="maintenance">Maintenance & Repairs ($/mo)</label>
+<input type="number" id="maintenance" value="300" min="0" step="25">
+</div>
+<div class="field">
+<label for="managementFee">Property Management Fee (% of rent)</label>
+<input type="number" id="managementFee" value="8" min="0" max="100" step="0.5">
+</div>
+<div class="field">
+<label for="capex">Capital Expenditures Reserve ($/mo)</label>
+<input type="number" id="capex" value="200" min="0" step="25">
+</div>
+</div>
+</div>
+
+<!-- Capital Inputs -->
+<div class="card" style="margin-bottom:2.5rem">
+<h2>💰 Investment Details</h2>
+<div class="grid" style="gap:1rem;margin-top:.5rem">
+<div class="field">
+<label for="purchasePrice">Property Purchase Price ($)</label>
+<input type="number" id="purchasePrice" value="600000" min="0" step="1000">
+</div>
+<div class="field">
+<label for="downPayment">Down Payment + Closing Costs ($)</label>
+<input type="number" id="downPayment" value="132000" min="0" step="1000">
+</div>
+</div>
+</div>
+
+<!-- Results -->
+<div class="results-section">
+<h2>📊 Your Property Management Profit Analysis</h2>
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-label">Net Operating Income (NOI)</div>
+<div class="metric-value" id="noi">$0</div>
+<div class="metric-sub" id="noiSub">per year</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Cash-on-Cash Return</div>
+<div class="metric-value" id="coc">0%</div>
+<div class="metric-sub" id="cocSub">annual return on cash invested</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Operating Expense Ratio</div>
+<div class="metric-value" id="oer">0%</div>
+<div class="metric-sub" id="oerSub">of gross income consumed by ops expenses</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Net Profit Margin</div>
+<div class="metric-value" id="margin">0%</div>
+<div class="metric-sub" id="marginSub">after ALL expenses including debt service</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Break-Even Occupancy</div>
+<div class="metric-value" id="breakeven">0%</div>
+<div class="metric-sub" id="breakevenSub">occupancy needed to cover all costs</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Monthly Cash Flow</div>
+<div class="metric-value" id="cashflow">$0</div>
+<div class="metric-sub" id="cashflowSub">after debt service &amp; all expenses</div>
+</div>
+</div>
+
+<div class="info-box" id="diagnosis"></div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+<h3>Want Deeper Analysis?</h3>
+<p>Our free tools give you the numbers. Our paid toolkit gives you the framework to make better decisions than 95% of operators.</p>
+<a href="https://dereviankoandrey.github.io/luminary-product-hub/" class="btn-primary">Explore Luminary Tools →</a>
+<a href="https://dereviankoandrey.github.io/luminary-product-hub/waitlist.html" class="btn-secondary">Join Waitlist (Free)</a>
+</div>
+
+<footer>
+<p>Built by <strong>Luminary Ventures</strong> — Deterministic analysis. Auditable decisions.<br>
+<a href="https://dereviankoandrey.github.io/luminary-product-hub/" style="color:#60a5fa;text-decoration:none">luminary-product-hub.github.io</a></p>
+</footer>
+</div>
+
+<script src="luminary-analytics.js"></script>
+<script>
+function formatCurrency(n){return n>=0?'$'+n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}):'-$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
+function pct(n,d){if(d===0)return'N/A';var p=(n/d)*100;return p.toFixed(1)+'%'}
+function calc(){
+var grossRent=parseFloat(document.getElementById('grossRent').value)||0;
+var otherIncome=parseFloat(document.getElementById('otherIncome').value)||0;
+var vacancyRate=parseFloat(document.getElementById('vacancyRate').value)/100||0;
+var mortgage=parseFloat(document.getElementById('mortgage').value)||0;
+var insurance=parseFloat(document.getElementById('insurance').value)||0;
+var propertyTax=parseFloat(document.getElementById('propertyTax').value)||0;
+var maintenance=parseFloat(document.getElementById('maintenance').value)||0;
+var mgmtPct=(parseFloat(document.getElementById('managementFee').value)/100||0);
+var capex=parseFloat(document.getElementById('capex').value)||0;
+var purchasePrice=parseFloat(document.getElementById('purchasePrice').value)||0;
+var downPayment=parseFloat(document.getElementById('downPayment').value)||0;
+
+var effectiveGrossIncome=grossRent*(1-vacancyRate)*12+otherIncome;
+var monthlyMgmtFee=grossRent*mgmtPct;
+var totalMonthlyExpenses=mortgage+insurance+propertyTax+maintenance+monthlyMgmtFee+capex;
+var annualOperatingExpenses=(totalMonthlyExpenses-mortgage)*12; // exclude debt service from operating expenses
+var noi=effectiveGrossIncome-annualOperatingExpenses;
+var annualDebtService=mortgage*12;
+var cashFlowBeforeTax=noi-annualDebtService;
+var monthlyCashFlow=cashFlowBeforeTax/12;
+
+// Cash-on-Cash Return
+var cocReturn=downPayment>0?(cashFlowBeforeTax/downPayment)*100:0;
+
+// Operating Expense Ratio (excl. debt service)
+var totalOperatingExpensesExDebt=(insurance+propertyTax+maintenance+monthlyMgmtFee+capex)*12;
+var oerRatio=effectiveGrossIncome>0?(totalOperatingExpensesExDebt/effectiveGrossIncome)*100:0;
+
+// Net Profit Margin (after ALL expenses incl. debt)
+var netProfitMargin=effectiveGrossIncome>0?(cashFlowBeforeTax/effectiveGrossIncome)*100:0;
+
+// Break-even occupancy: where NOI = debt service
+var monthlyNonDebtExpenses=insurance+propertyTax+maintenance+monthlyMgmtFee+capex;
+var annualNonDebtExpenses=monthlyNonDebtExpenses*12;
+var otherIncomeMonthly=otherIncome/12;
+// Break-even occupancy calculation:
+// At break-even: Gross Rent * Occupancy% = Non-Debt Monthly Expenses + Mortgage - Other Income (monthly)
+var monthlyOtherIncome=otherIncome/12;
+var beOccupancy=grossRent>0?((mortgage+monthlyNonDebtExpenses-otherIncomeMonthly)/grossRent)*100:0;
+
+document.getElementById('noi').textContent=formatCurrency(Math.round(noi));
+document.getElementById('coc').textContent=cocReturn.toFixed(1)+'%';
+document.getElementById('oer').textContent=oerRatio.toFixed(1)+'%';
+document.getElementById('margin').textContent=netProfitMargin.toFixed(1)+'%';
+document.getElementById('breakeven').textContent=Math.min(beOccupancy,999).toFixed(0)+'%';
+document.getElementById('cashflow').textContent=formatCurrency(Math.round(monthlyCashFlow));
+
+// Color coding
+var cocEl=document.getElementById('coc');
+cocEl.className='metric-value '+(cocReturn>=8?'positive':cocReturn>=4?'warning':'negative');
+
+var marginEl=document.getElementById('margin');
+marginEl.className='metric-value '+(netProfitMargin>=15?'positive':netProfitMargin>=5?'warning':'negative');
+
+var breakevenEl=document.getElementById('breakeven');
+breakevenEl.className='metric-value '+(beOccupancy<=70?'positive':beOccupancy<=85?'warning':'negative');
+
+// Diagnosis
+var diagnosis=[];
+if(beOccupancy>90)diagnosis.push("⚠️ Your break-even occupancy exceeds 90% — minimal vacancy tolerance. Consider reducing expenses or increasing rents.");
+else if(beOccupancy>75)diagnosis.push("📊 Break-even is manageable but tight at "+beOccupancy.toFixed(0)+"%. A single month of full vacancy could turn cash flow negative.");
+if(oerRatio>35)diagnosis.push("🔧 Operating expenses consume "+oerRatio.toFixed(1)+"% of income — above the 25-30% healthy range. Audit management fees and maintenance costs.");
+if(cocReturn<4)diagnosis.push("💸 Cash-on-cash return below 4% is underperforming typical market benchmarks (6-10%). Review capitalization strategy.");
+if(diagnosis.length===0)diagnosis.push("✅ Your metrics look solid. NOI is positive, cash flow covers all obligations, and your expense ratio is in a healthy range.");
+
+document.getElementById('diagnosis').textContent=diagnosis.join(' ');
+}
+
+// Bind events to all inputs
+var inputs=document.querySelectorAll('input[type="number"]');
+inputs.forEach(function(el){el.addEventListener('input',calc)});
+
+// Initial calc
+calc();
+</script>
+</body>
+</html>
