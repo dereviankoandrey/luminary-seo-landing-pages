@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dereviankoandrey.github.io/luminary-seo-landing-pages/sitemap.xml
+
+# Allow all crawlers to index our tools and guides
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /

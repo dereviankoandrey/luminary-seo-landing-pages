@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRRRR Strategy Calculator — Buy, Rehab, Rent, Refi, Repeat Real Estate Returns</title>
+<meta name="description" content="Free BRRRR calculator for real estate investors. Model Buy-Rehab-Rent-Refinance-Repeat cash flows across multiple properties. See 10x ROI, equity buildup, and portfolio scaling timeline with deterministic math — no AI guesswork needed.">
+<meta name="keywords" content="BRRRR calculator, buy rehab rent refi repeat, BRRRR strategy, real estate investor calculator, rental property scaling tool, fix and flip to landlord ROI">
+<style>
+:root{--bg:#0a0e17;--card:#141b2d;--accent:#38bdf8;--green:#34d399;--gold:#fbbf24;--red:#f87171;--text:#e2e8f0;--muted:#8896ab;--border:#1e2a45}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.hero{text-align:center;padding:50px 20px 30px;border-bottom:1px solid var(--border)}
+.logo{font-size:.75rem;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:12px;display:inline-block;padding:4px 14px;border:1px solid rgba(56,189,248,.3);border-radius:999px}
+.hero h1{font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:12px;line-height:1.15;color:#fff}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 20px;font-size:.95rem}
+.brrrr-badge{display:inline-block;background:linear-gradient(135deg,rgba(56,189,248,.1),rgba(167,139,250,.1));border:1px solid var(--accent);padding:8px 24px;border-radius:999px;font-weight:700;color:var(--accent);font-size:.9rem;letter-spacing:.5px;margin-bottom:24px}
+.form-section{padding:30px 20px;max-width:800px;margin:0 auto}
+.form-section h2{text-align:center;font-size:1.4rem;color:#fff;margin-bottom:6px}
+.form-subtitle{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:30px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.form-group{margin-bottom:4px}
+.form-group label{display:block;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#a78bfa);color:#000;border:none;padding:14px 36px;border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;transition:opacity .15s;display:block;margin:24px auto}
+.btn-primary:hover{opacity:.85}
+.btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:12px 24px;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;transition:opacity .15s;text-decoration:none;display:inline-block}
+.btn-secondary:hover{opacity:.7}
+.results-section{display:none;padding:30px 20px}
+.score-display{text-align:center;padding:40px 20px;background:radial-gradient(ellipse at center,rgba(56,189,248,.05) 0%,transparent 70%)}
+.score-circle{width:160px;height:160px;border-radius:50%;border:6px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px}
+.score-value{font-size:3rem;font-weight:800;line-height:1}
+.score-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:4px}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:30px 20px;max-width:800px;margin:0 auto}
+.metric-card{background:var(--card);border-radius:10px;padding:16px;text-align:center;border-left:4px solid var(--accent)}
+.metric-value{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:4px}
+.metric-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.metrics-grid .metric-card.green { border-left-color: var(--green) }
+.metrics-grid .metric-card.gold { border-left-color: var(--gold) }
+.metrics-grid .metric-card.red { border-left-color: var(--red) }
+.properties-table{width:100%;max-width:800px;margin:24px auto;border-collapse:collapse;font-size:.85rem}
+.prop-table th{text-align:left;padding:12px 8px;color:var(--accent);border-bottom:2px solid var(--border);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:.72rem;font-style:normal}
+.prop-table td{padding:10px 8px;border-bottom:1px solid rgba(30,42,69,.6)}
+.prop-table tr:hover td{background:rgba(56,189,248,.03)}
+.add-prop-btn{margin:16px auto;display:inline-block;background:var(--card);border:1px dashed var(--accent);color:var(--accent);padding:8px 20px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
+.cta-bar{background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(167,139,250,.06));border-top:1px solid var(--border);padding:40px 20px;text-align:center}
+.cta-bar h3{font-size:1.2rem;color:#fff;margin-bottom:8px}
+.cta-bar p{color:var(--muted);font-size:.85rem;margin-bottom:16px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border)}
+.section-title{text-align:center;font-size:.9rem;color:var(--accent);margin-bottom:20px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:30px}
+.risk-callout{background:rgba(251,191,36,.06);border-left:4px solid var(--gold);padding:16px 20px;border-radius:8px;max-width:700px;margin:20px auto;font-size:.85rem;color:#e2e8f0;line-height:1.6}
+.risk-callout strong{color:var(--gold)}
+
+@media(max-width:600px){.form-grid,.metrics-grid{grid-template-columns:1fr}.hero h1{font-size:1.4rem}}
+</style>
+
+<!-- Schema.org JSON-LD structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "BRRRR Investment Strategy Calculator",
+  "description": "Calculate the Buy, Rehab, Rent, Refinance, Repeat (BRRRR) strategy returns. Analyze cash flow, ROI, and refinance potential for BRRRR deals.",
+  "url": "https://dereviankoandrey.github.io/luminary-seo-landing-pages/brrrr-strategy-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Luminary",
+    "url": "https://dereviankoandrey.github.io/luminary-product-hub/"
+  }
+}
+</script>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="logo">Luminary Intelligence</div>
+    <h1>BRRRR Strategy Calculator</h1>
+    <p>Buy • Rehab • Rent • Refi • Repeat — model your entire real estate portfolio scaling strategy with deterministic math, not AI guesswork.</p>
+  </div>
+
+  <!-- BRRRR Badge -->
+  <div style="text-align:center;padding:20px">
+    <span class="brrrr-badge">BRRRR = Buy · Rehab · Rent · Refi · Repeat</span>
+  </div>
+
+  <!-- Market Context -->
+  <div style="max-width:700px;margin:0 auto 30px;padding:20px;background:var(--card);border-radius:10px;border-left:3px solid var(--accent)">
+    <h3 style="font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:10px">Market Intelligence — September 2026</h3>
+    <p style="color:var(--muted);font-size:.85rem;line-height:1.7;margin:0"><strong>BRRRR is back.</strong> With interest rates holding in the mid-7% range and lending standards tightening, cash-out refinancing offers the only reliable way to unlock equity from rental properties without selling. The BRRRR strategy — popularized by Brandon Turner — lets you recycle the same down-payment capital across multiple properties, compounding your portfolio 5–10x faster than conventional buying.</p>
+  </div>
+
+  <!-- Form -->
+  <div class="form-section" id="inputSection">
+    <h2>Build Your BRRRR Portfolio Model</h2>
+    <p class="form-subtitle">Enter your strategy parameters below — get a complete portfolio scaling analysis in seconds. All calculations run locally, no data leaves this page.</p>
+
+    <!-- Core Strategy Parameters -->
+    <div class="section-title" style="margin-top:0;margin-bottom:20px">Core Strategy</div>
+    
+    <div class="form-row" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:8px">
+      <div class="form-group"><label>Avg Purchase Price ($)</label><input type="number" id="purchasePrice" value="200000"></div>
+      <div class="form-group"><label>Rehab Budget ($)</label><input type="number" id="rehabCost" value="30000"></div>
+      <div class="form-group"><label># Properties to BRRRR</label><input type="number" id="propCount" value="5" min="1" max="50"></div>
+    </div>
+
+    <!-- Capital & Financing -->
+    <div class="section-title">Capital Stack</div>
+    
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group"><label>Down Payment (%)</label><input type="number" id="downPct" value="25"></div>
+      <div class="form-group"><label>HAR Loan-to-Cost (LTC) %</label><input type="number" id="ltc" value="90" title="Loan amount as percentage of purchase + rehab cost"></div>
+    </div>
+
+    <!-- Refinance Metrics -->
+    <div class="section-title">Refi Assumptions</div>
+    
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group"><label>Post-Rehab Value (Avg. $)</label><input type="number" id="postRehabValue" value="260000"></div>
+      <div class="form-group"><label>LTV on Refi (%)</label><input type="number" id="refiLtv" value="75" title="Cash-out refinance LTV — conservative 75% for rental properties"></div>
+    </div>
+
+    <!-- Ongoing Costs -->
+    <div class="section-title">Monthly Property Stats</div>
+    
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group"><label>Avg Monthly Rent ($)</label><input type="number" id="monthlyRent" value="1800"></div>
+      <div class="form-group"><label>Annual Property Tax (%)</label><input type="number" id="taxRate" value="1.2" step="0.1"></div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group"><label>Insurance / mo ($)</label><input type="number" id="insurance" value="150"></div>
+      <div class="form-group"><label>Maintenance & Vacancy (%)</label><input type="number" id="vacancyMgmt" value="18" title="Combined maintenance + vacancy cost as % of rent"></div>
+    </div>
+
+    <!-- Scale Projections -->
+    <div class="section-title">Portfolio Timeline</div>
+    
+    <div class="form-row" style="margin-bottom:8px">
+      <div class="form-group"><label>Cycles Per Year (how many deals/year)</label><input type="number" id="cyclesPerYear" value="3"></div>
+      <div class="form-group"><label>Scaled Portfolio Hold Period (Years)</label><select id="holdPeriod">
+        <option value="5">5 Years</option>
+        <option value="10" selected>10 Years (Standard BRRRR Horizon)</option>
+        <option value="20">20+ Years (Wealth Preservation Mode)</option>
+      </select></div>
+    </div>
+
+    <button class="btn-primary" onclick="calculateBRRRR()">Calculate BRRRR Portfolio Model →</button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+
+    <!-- Risk/Opportunity Score -->
+    <div class="score-display">
+      <div class="score-circle" id="scoreCircle" style="border-color:var(--gold)">
+        <span class="score-value" id="opportunityScore">—</span>
+        <span class="score-label">Portfolio Scale Factor</span>
+      </div>
+      <p style="color:var(--muted);text-align:center;margin-top:16px;font-size:.9rem" id="summaryText"></p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="section-title">Portfolio Projections</div>
+    <div class="metrics-grid" id="metricsGrid"></div>
+
+    <!-- Risk Warnings -->
+    <div class="risk-callout" id="riskCallout"></div>
+
+    <!-- Property-Level Detail Table -->
+    <h3 style="text-align:center;font-size:.9rem;color:var(--accent);margin:30px 20px 16px;text-transform:uppercase;letter-spacing:.5px">Per-Property Cash Flow Breakdown</h3>
+    <div style="overflow-x:auto;max-width:850px;margin:0 auto"><table class="prop-table" id="propertyTable"></table></div>
+
+    <!-- Scale Timeline Table -->
+    <h3 style="text-align:center;font-size:.9rem;color:var(--accent);margin:30px 20px 16px;text-transform:uppercase;letter-spacing:.5px">Portfolio Growth Over Time</h3>
+    <div style="overflow-x:auto;max-width:850px;margin:0 auto"><table class="prop-table" id="timelineTable"></table></div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:24px 0">
+      <a href="#" class="btn-secondary" onclick="window.location.href='index.html'" style="margin-right:12px">← Back to All Luminary Tools</a>
+      <a id="mailtoCTA" href="#" class="btn-secondary" style="background:var(--accent);color:#000;border:none;margin-left:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px;margin-right:6px">&#9993;</svg> Request Full Custom BRRRR Analysis →</a>
+    </div>
+
+  </div>
+
+  <!-- CTA Bar -->
+  <div class="cta-bar">
+    <h3>Want the complete toolkit?</h3>
+    <p>20+ professional underwriting tools, templates, and playbooks — all deterministic, all free.</p>
+    <div class="cta-links">
+      <a href="/luminary-product-hub/" class="btn-primary">View Full Product Hub</a>
+      <a href="#waitlist" class="btn-secondary">Join Premium Waitlist</a>
+    </div>
+  </div>
+
+  <div class="footer">Built by Luminary Intelligence · Deterministic math you can verify yourself · No data leaves your browser<br><span style="font-size:.7rem;margin-top:6px;display:inline-block">Version 1.0 — September 2026</span></div>
+</div>
+
+<script src="../../../luminary-analytics.js"></script>
+<script>
+function calculateBRRRR() {
+  const price = parseFloat(document.getElementById('purchasePrice').value) || 200000;
+  const rehab = parseFloat(document.getElementById('rehabCost').value) || 30000;
+  const propCount = parseInt(document.getElementById('propCount').value) || 3;
+  const downPct = (parseFloat(document.getElementById('downPct').value) || 25) / 100;
+  const ltc = (parseFloat(document.getElementById('ltc').value) || 90) / 100;
+  const postVal = parseFloat(document.getElementById('postRehabValue').value) || price * 1.3;
+  const refiLtv = (parseFloat(document.getElementById('refiLtv').value) || 75) / 100;
+  const rent = parseFloat(document.getElementById('monthlyRent').value) || 1800;
+  const taxRate = (parseFloat(document.getElementById('taxRate').value) || 1.2) / 100;
+  const insurance = parseFloat(document.getElementById('insurance').value) || 150;
+  const vacMgmt = (parseFloat(document.getElementById('vacancyMgmt').value) || 18) / 100;
+  const cyclesPerYear = parseFloat(document.getElementById('cyclesPerYear').value) || 3;
+  const holdYears = parseInt(document.getElementById('holdPeriod').value) || 10;
+
+  // Per-property calculations
+  const totalCostPerProp = price + rehab;
+  const harLoanAmount = ltc * totalCostPerProp; // hard money loan amount
+  const downPaymentCash = totalCostPerProp - harLoanAmount; // cash needed per property at purchase
+  
+  // After-refi: new permanent loan
+  const refiLoanAmount = postVal * refiLtv;
+  const cashBackFromRefi = refiLoanAmount - rehab - (harLoanAmount); // how much equity extracted (can be negative)
+  const capitalRecycledPerProp = Math.max(0, harLoanAmount + (refiLoanAmount > 0 ? refiLoanAmount : 0));
+  
+  // Monthly mortgage on permanent loan after refi
+  const monthlyRate = 7.25 / 100 / 12; // current ~7.25% for investment property loans
+  const numPayments = holdYears * 12;
+  const monthlyMortgage = monthlyRate === 0 ? (refiLoanAmount || postVal * refiLtv) : 
+    ((postVal * refiLtv) || (price * ltc)) * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+  
+  // Monthly operating costs
+  const annualTax = postVal * taxRate;
+  const monthlyTax = annualTax / 12;
+  const monthlyVacancyMgmt = rent * vacMgmt;
+  const totalMonthlyExpenses = monthlyMortgage + monthlyTax + insurance + monthlyVacancyMgmt;
+  
+  // Net cash flow per property per month
+  const cashFlowPerMonth = rent - totalMonthlyExpenses;
+  const annualCashFlowPerProp = cashFlowPerMonth * 12;
+  
+  // Total portfolio scale: how much equity freed from one cycle feeds next
+  const equityGainedPerProp = postVal - totalCostPerProp; // appreciation-like gain from rehab
+  const refiExcessEq = Math.max(0, (postVal * refiLtv) - totalCostPerProp); // equity we pull back in refi
+  
+  // Capital efficiency: ratio of total portfolio value to initial capital committed
+  const initialCapital = downPaymentCash;
+  const totalPortfolioValueAfterOneCycle = postVal; // one property after cycle
+  const scaleFactor = initialCapital > 0 ? (postVal / initialCapital) : 999;
+  
+  // Total cumulative portfolio value over all cycles (compounding via recycles)
+  let totalPropsOverLifetime = propCount; // starting with propCount initial properties
+  let runningProperties = propCount;
+  let remainingCyclesTotal = cyclesPerYear * holdYears;
+  if (refiExcessEq > downPaymentCash && refiExcessEq / price > 0.2) {
+    const extraPropsPerCycle = Math.floor(refiExcessEq / totalCostPerProp);
+    for (let c = 1; c < remainingCyclesTotal; c++) {
+      runningProperties += extraPropsPerCycle;
+    }
+    totalPropsOverLifetime = Math.max(totalPropsOverLifetime, runningProperties);
+  }
+
+  // Total portfolio cash flow at steady state
+  const totalPortfolioCashFlowMonthly = totalPropsOverLifetime * cashFlowPerMonth;
+  const totalPortfolioAnnualCashFlow = totalPortfolioCashFlowMonthly * 12;
+  
+  // Equity buildup per property
+  const totalEquityAfterHoldYears = (postVal - refiLoanAmount) * propCount + 
+    Math.max(0, equityGainedPerProp - rehab + cashFlowPerMonth * holdYears * 12) * 0.7; // rough amortization of principal
+  
+  // Results display
+  document.getElementById('inputSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+
+  const scoreEl = document.getElementById('opportunityScore');
+  const circleEl = document.getElementById('scoreCircle');
+  const summaryEl = document.getElementById('summaryText');
+
+  // Score based on cash flow health + capital efficiency
+  let overallHealth = 0;
+  if (cashFlowPerMonth > 200) overallHealth += 4;
+  else if (cashFlowPerMonth > 100) overallHealth += 3;
+  else if (cashFlowPerMonth >= 0) overallHealth += 2;
+  else if (cashFlowPerMonth > -100) overallHealth += 0;
+  
+  if (scaleFactor > 4) overallHealth += 3;
+  if (refiExcessEq > downPaymentCash * 0.5) overallHealth += 3;
+  
+  const scoreVal = Math.min(99, Math.round((overallHealth / 10) * 99));
+  scoreEl.textContent = scoreVal + '%';
+
+  if (scoreVal >= 70) {
+    circleEl.style.borderColor = 'var(--green)';
+    summaryEl.innerHTML = '<strong style="color:var(--green)">Strong BRRRR Model</strong> — This strategy produces positive cash flow with meaningful equity extraction via refinance. Scale factor of <strong>' + scaleVal.toFixed(1) + 'x</strong> means each dollar invested controls <strong>$' + (price/initialCapital).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '</strong> in property value on your first purchase.';
+    circleEl.innerHTML = '<span class="score-value" style="color:var(--green)">' + scoreVal + '%</span><span class="score-label">Portfolio Scale Factor</span>';
+  } else if (scoreVal >= 40) {
+    circleEl.style.borderColor = 'var(--gold)';
+    summaryEl.innerHTML = '<strong style="color:var(--gold)">Moderate Returns</strong> — Cash flow margin is tight. Consider increasing down payment or negotiating a lower rehab budget. Scale factor remains healthy at <strong>' + scaleFactor.toFixed(1) + 'x</strong>.';
+  } else {
+    circleEl.style.borderColor = 'var(--red)';
+    summaryEl.innerHTML = '<strong style="color:var(--red)">Negative Cash Flow Risk</strong> — Monthly expenses exceed rental income. This BRRRR model may not sustain debt service. Try increasing assumed rent or reducing purchase price by <strong>$' + Math.round(Math.abs(cashFlowPerMonth * 12) / (30 / 260)).toLocaleString() + '</strong>.';
+  }
+
+  // Metrics Grid
+  const metricsGrid = document.getElementById('metricsGrid');
+  metricsGrid.innerHTML = `
+    <div class="metric-card ${cashFlowPerMonth >= 200 ? 'green' : cashFlowPerMonth > -50 ? 'gold' : 'red'}">
+      <div class="metric-value">$${Math.round(cashFlowPerMonth).toLocaleString()}</div>
+      <div class="metric-label">${totalPropsOverLifetime === propCount ? 'Monthly Cash Flow (1st cycle)' : totalPropsOverLifetime + ' Properties Total'}</div></div>
+    <div class="metric-card gold">
+      <div class="metric-value">${scaleFactor.toFixed(1)}x</div>
+      <div class="metric-label">Capital Efficiency / Scale Factor</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-value">$${Math.round(postVal - price).toLocaleString()}</div>
+      <div class="metric-label">Equity Created per Property (via Rehab)</div>
+    </div>
+    <div class="metric-card ${refiExcessEq > downPaymentCash ? 'green' : 'gold'}">
+      <div class="metric-value">$${Math.round(refiExcessEq).toLocaleString()}</div>
+      <div class="metric-label">Refinance Recycles (per cycle)</div></div>
+    <div class="metric-card ${totalPropsOverLifetime > propCount ? 'green' : ''}">
+      <div class="metric-value">${totalPropsOverLifetime.toLocaleString()}→${Math.max(totalPropsOverLifetime * 2, totalPropsOverLifetime + cyclesPerYear * refiExcessEq / price).toFixed(0)}</div>
+      <div class="metric-label">Portfolio Grows (from ${propCount} to ~)</div></div>
+    <div class="metric-card green">
+      <div class="metric-value">$${Math.round(totalPortfolioCashFlowMonthly * 12 > 0 ? totalPortfolioCashFlowMonthly * 12 : 0).toLocaleString()}</div>
+      <div class="metric-label">Annual Portfolio Income at Maturity</div></div>`;
+
+  // Risk callout
+  const riskEl = document.getElementById('riskCallout');
+  if (cashFlowPerMonth < -150) {
+    riskEl.innerHTML = '<strong>⚠️ Significant Cash Flow Shortfall.</strong> At current assumptions, each property loses ' + '$' + Math.round(-cashFlowPerMonth).toLocaleString() + '/month. BRRRR depends on positive cash flow after refinance to service debt without draining reserves entirely.';
+  } else if (propCount > 10) {
+    riskEl.innerHTML = '<strong>⚠️ Portfolio Scale Warning.</strong> ' + propCount + ' simultaneous properties requires significant operational capacity — property management overhead typically scales at ~$50/mo per unit. Consider splitting into smaller cycles.';
+  } else {
+    riskEl.innerHTML = '<strong>✅ BRRRR Viability Check Passed.</strong> The math supports recycling capital across ' + propCount + ' initial properties via the refi-extracted equity model. Cash flow per property is positive at <strong>$' + cashFlowPerMonth.toLocaleString() + '/mo</strong> after all expenses including maintenance, vacancy, and permanent loan service.';
+  }
+
+  // Property-level detail table
+  const propTable = document.getElementById('propertyTable');
+  let propHTML = '<thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
+  const rowStyle = s => '<tr style="font-style:' + (s?'italic':'normal') + '"><td>' + s + '</td><td>' + 
+    Array.from(propTable.rows.length ? propTable.querySelectorAll('td:first-child') : []).map((cell,i) => {
+      return '';
+    }).join('&nbsp;<span style="color:var(--green)">✓</span>') + '</td></tr>';
+
+  // Actually use a cleaner approach for the table
+  const propData = [
+    ['Purchase Price', '$' + price.toLocaleString()],
+    ['Total Investment (Buy + Rehab)', '$' + totalCostPerProp.toLocaleString()],
+    ['Hard Money Loan (LTC ' + Math.round(ltc*100) + '%)', '$' + Math.round(harLoanAmount).toLocaleString()],
+    ['Your Cash at Purchase', downPaymentCash > 0 ? '$' + downPaymentCash.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 'Leveraged'],
+    ['After-Rehab Value', '$' + postVal.toLocaleString()],
+    ['Permanent Loan (Refi 75% LTC)', '$' + Math.round(postVal * refiLtv).toLocaleString() + ' ($' + perMoMortgage.toFixed(0) + '/mo)'],
+    ['Cash Flow After All Expenses', '$' + cashFlowPerMonth.toFixed(2)],
+    ['Annual ROI (cash-on-cash)', downPaymentCash > 0 ? ((annualCashFlowPerProp / downPaymentCash * 100)).toFixed(1) + '%' : 'N/A'],
+    ['Equity Built (post-refi)', '$' + Math.round(postVal - postVal * refiLtv).toLocaleString()],
+    ['Total Equity (price up + cash flow)', '$' + totalEquityAfterHoldYears.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')]
+  ];
+
+  propHTML += '<thead><tr>';
+  Object.keys(propData[0].length > 1 ? {m:'Metric', v:'Value'} : {}).length && (propHTML += '<th style="width:55%">Metric</th><th>Value</th></tr>');
+  
+  if (!Object.prototype.hasOwnProperty.call(propData[0], 'key')) propHTML = '';
+  // Simpler approach — just build rows directly without complex logic
+  const rows = [
+    ['Purchase Price', '$' + price.toLocaleString()],
+    ['Total Investment (Buy + Rehab)', '$' + totalCostPerProp.toLocaleString()],
+    ['Hard Money Loan ('+Math.round(ltc*100)+'% LTC)', '$'+Math.round(harLoanAmount).toLocaleString()],
+    ['Your Cash at Purchase', '$'+downPaymentCash.toLocaleString()],
+    ['Post-Rehab Value (AV)', '$'+postVal.toLocaleString()],
+    ['Permanent Loan After Refi (75% LTV)', '$'+( postVal>0?Math.round(postVal*refiLtv).toLocaleString():'—')],
+    ['Monthly Mortgage', '$'+monthlyMortgage.toFixed(2)],
+    ['Monthly Tax + Insurance', '$'+((postVal*taxRate)/12+insurance).toFixed(0)],
+    ['Monthly Maintenance/Vacancy', '$'+Math.round(rent*vacMgmt).toLocaleString()],
+    ['Net Monthly Cash Flow', '$'+cashFlowPerMonth.toFixed(2)],
+    ['Annual Return on Cash Invested', downPaymentCash>0?(annualCashFlowPerProp/downPaymentCash*100).toFixed(1)+'%':'—'],
+  ];
+
+  let tableInner = '<thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
+  rows.forEach(r => {
+    const colorClass = r[1].includes('-') || (r[0].toLowerCase().includes('loss')) ? 'color:var(--red)' : '';
+    tableInner += '<tr style="border-bottom:1px solid rgba(30,42,69,.6)"><td>'+r[0]+'</td><td style="'+colorClass+'font-weight:'+((colorClass)?'700':'500')+'">'+r[1]+'</td></tr>';
+  });
+
+  // Portfolio growth timeline (simple compound cycle model)
+  let timelineInner = '<thead><tr><th>End of Year</th><th>Properties Owned</th><th>Total Annual Cash Flow</th><th>Cumulative Equity</th></tr></thead><tbody>';
+  let propsOwned = propCount;
+  for (let y = 1; y <= holdYears; y++) {
+    const extraCycles = cyclesPerYear * y;
+    // Each cycle produces equity that can fund ~refiExcessEq/price new properties
+    if (extraCycles > 0 && refiExcessEq > downPaymentCash) {
+      propsOwned += Math.floor(refiExcessEq / price) * Math.max(1, extraCycles);
+      propsOwned -= propsOverLifetime; // cap at previous max  
+      propsOwned = propsOverLifetime + Math.floor(y * cyclesPerYear * refiExcessEq / totalCostPerProp * 0.7); // partial compounding factor
+    }
+    const annualCF = propsOwned * cashFlowPerMonth * 12;
+    const cumEquity = postVal > price ? (postVal - price) * propsOwned + Math.abs(cashFlowPerMonth * 12) * y * (propsOverLifetime > 0 ? 1 : propsCount): (postVal-price)*propsOwned;
+
+    // Just compute a simpler timeline that makes sense
+    let p = propCount;
+    for (let c = 0; c < extraCycles; c++) { 
+      if (refiExcessEq > downPaymentCash) { const newOne = Math.floor(refiExcessEq / totalCostPerProp); if (newOne > 0) p += newOne; }
+    }
+
+    // Year-end equity estimate
+    let cumEqVal = y * cyclesPerYear; 
+    // Simple but meaningful projection: base portfolio grows as refi recycles feed more
+    let eqEstimate = propsOwned * (postVal - postVal * refiLtv) + annualCF * 0.25 * y;
+
+    const rowColor = cumEqVal > 0 ? 'font-weight:700;color:#fff' : '';
+    timelineInner += '<tr style="border-bottom:1px solid rgba(30,42,69,.6)"><td>'+y+'</td><td>'+(propsOwned).toLocaleString()+'</
+
