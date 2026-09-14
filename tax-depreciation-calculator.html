@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Depreciation Calculator — Real Estate Investment Analysis | Luminary</title>
+<meta name="description" content="Free tax depreciation calculator for real estate investors. Calculate straight-line, MACRS, and accelerated depreciation schedules. Plan your cost segregation strategy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6}
+.container{max-width:800px;margin:0 auto;padding:2rem 1.5rem}
+header{text-align:center;padding:3rem 0 2rem;border-bottom:1px solid #e2e8f0;margin-bottom:2rem}
+h1{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.subtitle{color:#64748b;font-size:1.1rem;max-width:600px;margin:0 auto}
+.card{background:white;border-radius:12px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04)}
+h2{font-size:1.4rem;font-weight:700;margin-bottom:1rem;color:#334155}
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-weight:600;margin-bottom:.4rem;color:#374151;font-size:.95rem}
+input,select{width:100%;padding:.75rem 1rem;border:2px solid #e2e8f0;border-radius:8px;font-size:1rem;transition:border-color .2s;background:white}
+input:focus,select:focus{outline:none;border-color:#6366f1}
+.btn{display:inline-block;padding:.85rem 2rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border:none;border-radius:8px;font-size:1.05rem;font-weight:600;cursor:pointer;width:100%;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,.3)}
+.results{display:none}
+.results h3{font-size:1.2rem;color:#6366f1;margin-bottom:.75rem;font-weight:700}
+table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.9rem}
+th,td{padding:.6rem .75rem;text-align:left;border-bottom:1px solid #e2e8f0}
+th{background:#f1f5f9;font-weight:600;color:#475569;position:sticky;top:0}
+tr:hover td{background:#fafbff}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat-box{text-align:center;padding:1rem;background:linear-gradient(135deg,#f0f9ff,#eef2ff);border-radius:8px;border:1px solid #e0e7ff}
+.stat-value{font-size:1.6rem;font-weight:800;color:#4f46e5}
+.stat-label{font-size:.8rem;color:#64748b;margin-top:.2rem}
+.cta-box{background:linear-gradient(135deg,#ede9fe,#f0f9ff);border:2px solid #c4b5fd;border-radius:12px;padding:1.5rem;text-align:center;margin-top:2rem}
+.cta-box h3{font-size:1.2rem;color:#6d28d9;margin-bottom:.5rem}
+.cta-box p{color:#5b21b6;font-size:.95rem;margin-bottom:1rem}
+.cta-btn{display:inline-block;padding:.7rem 1.5rem;background:#6366f1;color:white;text-decoration:none;border-radius:8px;font-weight:600;transition:background .2s}
+.cta-btn:hover{background:#4f46e5}
+.footer{text-align:center;padding:2rem 0;color:#94a3b8;font-size:.85rem;margin-top:2rem}
+@media(max-width:600px){h1{font-size:1.6rem}.container{padding:1rem}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🏗️ Tax Depreciation Calculator</h1>
+<p class="subtitle">Calculate straight-line, MACRS, and accelerated depreciation schedules for rental properties. Plan your cost segregation strategy.</p>
+</header>
+
+<div class="card">
+<h2>Property Details</h2>
+<div class="form-group">
+<label for="propertyCost">Total Property Cost ($)</label>
+<input type="number" id="propertyCost" placeholder="e.g., 350000" value="350000">
+</div>
+<div class="form-group">
+<label for="landValue">Land Value ($)</label>
+<input type="number" id="landValue" placeholder="e.g., 70000 (typically ~20% of total)" value="70000">
+</div>
+<div class="form-group">
+<label for="propertyType">Property Type</label>
+<select id="propertyType">
+<option value="residential" selected>Residential Rental (27.5 years)</option>
+<option value="commercial">Commercial Building (39 years)</option>
+</select>
+</div>
+<div class="form-group">
+<label for="method">Depreciation Method</label>
+<select id="method">
+<option value="straight" selected>Straight-Line (Standard)</option>
+<option value="macrs">MACRS Accelerated (GDS)</option>
+</select>
+</div>
+<button class="btn" onclick="calculate()">Calculate Depreciation Schedule →</button>
+</div>
+
+<div id="results" class="results">
+<div class="card">
+<h3>📊 Summary</h3>
+<div class="summary-grid" id="summaryGrid"></div>
+</div>
+
+<div class="card">
+<h3>📋 Depreciation Schedule</h3>
+<p style="color:#64748b;margin-bottom:1rem;font-size:.9rem">Year-by-year breakdown of depreciation deductions. Use this for tax planning and cash flow projections.</p>
+<div style="max-height:500px;overflow-y:auto;border-radius:8px;border:1px solid #e2e8f0">
+<table id="scheduleTable">
+<thead><tr><th>Year</th><th>Basis</th><th>Rate</th><th>Deduction</th><th>Cumulative</th><th>Remaining Basis</th></tr></thead>
+<tbody id="scheduleBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3>💡 Tax Planning Notes</h3>
+<ul style="color:#475569;padding-left:1.2rem;line-height:1.8;font-size:.95rem">
+<li><strong>Straight-line:</strong> Even annual deductions over 27.5 years (residential) or 39 years (commercial)</li>
+<li><strong>MACRS:</strong> Accelerated depreciation using 200% declining balance switching to straight line — larger deductions in early years</li>
+<li><strong>Land is non-depreciable</strong> — only the building value ($<span id="buildingValue">280,000</span>) qualifies for depreciation</li>
+<li><strong>Cost segregation studies</strong> can reclassify portions of the building to 5/7/15-year categories, accelerating deductions significantly</li>
+<li>Consult a CPA before filing — individual circumstances vary</li>
+</ul>
+</div>
+
+<div class="cta-box">
+<h3>🚀 Get the Full Playbooks Bundle</h3>
+<p>Pre-configured AI agent systems for property analysis, underwriting, and portfolio management. Zero capital required.</p>
+<a href="waitlist.html" class="cta-btn">Join Waitlist — Early Access $9-$19</a>
+</div>
+</div>
+
+<footer class="footer">Built by <strong>Luminary Ventures</strong> · Free tools for smarter real estate investing</footer>
+</div>
+
+<script>
+const MACRS_275 = [3.485, 3.177, 3.177, 3.177, 3.177, 2.857, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.857];
+const MACRS_39 = [2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 2.564, 1.974];
+
+function fmt(n){return '$'+Math.round(n).toLocaleString()}
+function pct(n){return n.toFixed(3)+'%'}
+
+function calculate(){
+const cost=parseFloat(document.getElementById('propertyCost').value)||0;
+const land=parseFloat(document.getElementById('landValue').value)||0;
+const type=document.getElementById('propertyType').value;
+const method=document.getElementById('method').value;
+const basis=Math.max(0,cost-land);
+
+document.getElementById('buildingValue').textContent=basis.toLocaleString();
+
+let years, rates;
+if(type==='residential'){years=27.5;rates=MACRS_275;}else{years=39;rates=MACRS_39;}
+
+const slRate=(100/years).toFixed(4);
+const totalSL=basis*(slRate/100);
+
+let schedule=[],cumulative=0;
+
+if(method==='straight'){
+for(let y=1;y<=Math.ceil(years);y++){
+let deduction=y<years?totalSL:basis-cumulative;
+cumulative+=deduction;
+schedule.push({year:y,basis,rate:slRate+'%',deduction,cumulative});
+}
+}else{
+const rateList=type==='residential'?MACRS_275:MACRS_39;
+for(let y=0;y<rateList.length&&cumulative<basis;y++){
+let deduction=basis*(rateList[y]/100);
+if(cumulative+deduction>basis) deduction=basis-cumulative;
+cumulative+=deduction;
+schedule.push({year:y+1,basis,rate:rateList[y].toFixed(3)+'%',deduction,cumulative});
+}
+}
+
+// Summary stats
+const firstYear=schedule[0]?.deduction||0;
+const avgAnnual=schedule.reduce((s,r)=>s+r.deduction,0)/schedule.length;
+const totalDeduct=schedule.reduce((s,r)=>s+r.deduction,0);
+const taxBracket=24;
+const savings=totalDeduct*(taxBracket/100);
+
+document.getElementById('summaryGrid').innerHTML=`
+<div class="stat-box"><div class="stat-value">${fmt(firstYear)}</div><div class="stat-label">Year 1 Deduction</div></div>
+<div class="stat-box"><div class="stat-value">${fmt(avgAnnual)}</div><div class="stat-label">Avg Annual Deduction</div></div>
+<div class="stat-box"><div class="stat-value">${fmt(totalDeduct)}</div><div class="stat-label">Total Depreciable Basis</div></div>
+<div class="stat-box"><div class="stat-value">${fmt(savings)}</div><div class="stat-label">Est. Tax Savings (24% bracket)</div></div>`;
+
+const tbody=document.getElementById('scheduleBody');
+tbody.innerHTML=schedule.map(r=>`<tr><td>${r.year}</td><td>${fmt(r.basis)}</td><td>${r.rate}</td><td style="color:#16a34a;font-weight:600">${fmt(r.deduction)}</td><td>${fmt(r.cumulative)}</td><td>${fmt(Math.max(0,r.basis-r.cumulative))}</td></tr>`).join('');
+
+document.getElementById('results').style.display='block';
+document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
