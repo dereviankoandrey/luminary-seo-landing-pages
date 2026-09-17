@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Payoff Calculator — See How Much You Save by Paying Early | Luminary</title>
+<meta name="description" content="Free loan payoff calculator: compare standard vs accelerated payments, see exact interest savings, and find your optimal early-payoff timeline.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a1a;color:#e0e0e0;line-height:1.6}
+.container{max-width:900px;margin:0 auto;padding:20px}
+header{text-align:center;padding:40px 20px 30px;border-bottom:1px solid #1a1a3a}
+h1{font-size:clamp(1.6rem,4vw,2.4rem);background:linear-gradient(90deg,#4361ee,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.subtitle{color:#888;font-size:0.95rem;max-width:600px;margin:0 auto}
+.calculator-card{background:linear-gradient(135deg,#12122a 0%,#1a1a3a 100%);border:1px solid #2a2a4a;border-radius:16px;padding:30px;margin:30px 0;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.section-title{font-size:1.1rem;color:#7b8aff;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+.input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:20px}
+.input-group{display:flex;flex-direction:column;gap:6px}
+.input-group label{font-size:.85rem;color:#99a;font-weight:500}
+.input-group input,.input-group select{background:#0d0d1f;border:1px solid #2a2a4a;border-radius:8px;padding:12px 14px;color:#e0e0e0;font-size:1rem;transition:border-color .2s}
+.input-group input:focus,.input-group select:focus{outline:none;border-color:#4361ee;box-shadow:0 0 0 3px rgba(67,97,238,.15)}
+.btn-primary{background:linear-gradient(90deg,#4361ee,#7b2ff7);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-size:1rem;cursor:pointer;width:100%;font-weight:600;transition:transform .15s,box-shadow .15s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(67,97,238,.4)}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:25px 0}
+.result-card{background:#0d0d1f;border:1px solid #2a2a4a;border-radius:10px;padding:16px;text-align:center}
+.result-label{font-size:.78rem;color:#889;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.result-value{font-size:1.5rem;font-weight:700;color:#4ade80}
+.result-value.savings{color:#fbbf24}
+.result-value.time-saved{color:#38bdf8}
+table.amort-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.85rem}
+.amort-table th{background:#1a1a3a;color:#7b8aff;padding:10px 12px;text-align:left;border-bottom:2px solid #2a2a4a;position:sticky;top:0}
+.amort-table td{padding:8px 12px;border-bottom:1px solid #1a1a3a}
+.amort-table tr:hover{background:#151530}
+.table-wrapper{max-height:400px;overflow-y:auto;border-radius:8px;border:1px solid #2a2a4a;margin:15px 0}
+.comparison-bar{display:flex;align-items:center;gap:12px;margin:12px 0;font-size:.9rem}
+.bar-label{min-width:160px;color:#99a}
+.bar-track{flex:1;height:24px;background:#0d0d1f;border-radius:12px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:12px;display:flex;align-items:center;padding-left:10px;font-size:.75rem;color:#fff;font-weight:600;transition:width .8s ease}
+.bar-standard .bar-fill{background:linear-gradient(90deg,#ef4444,#f97316)}
+.bar-accelerated .bar-fill{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.cta-box{background:linear-gradient(135deg,#4361ee 0%,#3a0ca3 100%);border-radius:12px;padding:25px;text-align:center;margin:30px 0}
+.cta-box h3{color:#fff;margin-bottom:8px;font-size:1.2rem}
+.cta-box p{color:rgba(255,255,255,.8);margin-bottom:15px;font-size:.9rem}
+.btn-cta{display:inline-block;background:#fff;color:#3a0ca3;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:transform .15s}
+.btn-cta:hover{transform:scale(1.05)}
+.info-box{background:#12122a;border-left:3px solid #4361ee;padding:14px 18px;margin:15px 0;border-radius:0 8px 8px 0;font-size:.9rem;color:#aab}
+footer{text-align:center;padding:30px 20px;color:#556;font-size:.8rem;border-top:1px solid #1a1a3a;margin-top:40px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}.results-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+<h1><i class="fas fa-calculator"></i> Loan Payoff Calculator</h1>
+<p class="subtitle">See exactly how much interest you save by paying early — compare standard vs accelerated payoff timelines.</p>
+</header>
+
+<div class="container">
+<div class="calculator-card">
+<div class="section-title"><i class="fas fa-sliders-h"></i> Loan Details</div>
+<div class="input-grid">
+<div class="input-group">
+<label for="principal">Loan Amount ($)</label>
+<input type="number" id="principal" value="300000" min="1000" step="1000">
+</div>
+<div class="input-group">
+<label for="rate">Annual Interest Rate (%)</label>
+<input type="number" id="rate" value="6.5" min="0" max="30" step="0.125">
+</div>
+<div class="input-group">
+<label for="term">Loan Term (Years)</label>
+<select id="term">
+<option value="15">15 Years</option>
+<option value="20">20 Years</option>
+<option value="30" selected>30 Years</option>
+</select>
+</div>
+<div class="input-group">
+<label for="extraPayment">Extra Monthly Payment ($)</label>
+<input type="number" id="extraPayment" value="200" min="0" step="50">
+</div>
+</div>
+
+<button class="btn-primary" onclick="calculate()"><i class="fas fa-bolt"></i> Calculate Payoff Savings</button>
+</div>
+
+<div id="resultsArea" style="display:none">
+<div class="section-title"><i class="fas fa-chart-pie"></i> Results</div>
+<div class="results-grid" id="resultsGrid"></div>
+
+<div class="calculator-card">
+<div class="section-title"><i class="fas fa-balance-scale"></i> Comparison: Standard vs Accelerated Payoff</div>
+<div id="comparisonBars"></div>
+</div>
+
+<div class="calculator-card">
+<div class="section-title"><i class="fas fa-table"></i> Amortization Schedule (Accelerated)</div>
+<div class="info-box"><strong>Pro tip:</strong> Even $100/month extra on a 30-year loan can save tens of thousands in interest and shave years off your payoff timeline.</div>
+<div class="table-wrapper">
+<table class="amort-table" id="amortTable">
+<thead><tr><th>Year</th><th>Principal Paid</th><th>Interest Paid</th><th>Total Paid</th><th>Remaining Balance</th></tr></thead>
+<tbody id="amortBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="cta-box">
+<h3>Ready to Analyze Real Investment Deals?</h3>
+<p>Luminary provides deterministic deal analysis tools trusted by professional investors. Get early access.</p>
+<a href="/waitlist.html" class="btn-cta"><i class="fas fa-arrow-right"></i> Join the Waitlist</a>
+</div>
+
+<div style="text-align:center;margin:15px 0">
+<p style="color:#667;font-size:.85rem;margin-bottom:10px">Explore more Luminary tools:</p>
+<a href="/cap-rate-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 8px;font-size:.9rem"><i class="fas fa-chart-line"></i> Cap Rate</a>
+<a href="/arv-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 8px;font-size:.9rem"><i class="fas fa-home"></i> ARV Calculator</a>
+<a href="/brrrr-investment-strategy.html" style="color:#4361ee;text-decoration:none;margin:0 8px;font-size:.9rem"><i class="fas fa-sync-alt"></i> BRRRR Strategy</a>
+<a href="/dscr-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 8px;font-size:.9rem"><i class="fas fa-shield-alt"></i> DSCR Calculator</a>
+<a href="/property-management-profit-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 8px;font-size:.9rem"><i class="fas fa-building"></i> PM Profit Calc</a>
+</div>
+</div>
+
+<div class="info-box">
+<strong>About this calculator:</strong> This tool uses the standard amortization formula to calculate monthly payments, total interest, and payoff timelines. Extra payments are applied directly to principal, reducing future interest accrual. Results assume fixed-rate loans with no prepayment penalties — verify your loan terms before making financial decisions.
+</div>
+
+<footer>
+<p><a href="https://dereviankoandrey.github.io/luminary-product-hub/" style="color:#4361ee;text-decoration:none">Luminary Product Hub</a> · Deterministic deal analysis tools for professional investors</p>
+<p style="margin-top:5px">&copy; 2026 Luminary. Built for accuracy, not guesswork.</p>
+</footer>
+</div>
+
+<style>
+.cta-box{background:linear-gradient(135deg,#4361ee 0%,#3a0ca3 100%);border-radius:12px;padding:25px;text-align:center;margin:30px 0}
+.cta-box h3{color:#fff;margin-bottom:8px;font-size:1.2rem}
+.cta-box p{color:rgba(255,255,255,.8);margin-bottom:15px;font-size:.9rem}
+.btn-cta{display:inline-block;background:#fff;color:#3a0ca3;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:transform .15s}
+.btn-cta:hover{transform:scale(1.05)}
+</style>
+
+<div class="calculator-card">
+<div class="section-title"><i class="fas fa-envelope"></i> Join the Waitlist for Early Access</div>
+<p style="color:#aab;margin-bottom:12px">Get notified when Luminary's full deal analysis engine launches — deterministic, auditable, no black-box AI.</p>
+<a href="/waitlist.html" class="btn-cta"><i class="fas fa-arrow-right"></i> Join Waitlist</a>
+</div>
+
+<div style="text-align:center;margin:20px 0;padding-top:15px;border-top:1px solid #1a1a3a">
+<p style="color:#667;font-size:.8rem">Explore more Luminary tools:</p>
+<a href="/cap-rate-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-chart-line"></i> Cap Rate</a>
+<a href="/arv-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-home"></i> ARV</a>
+<a href="/brrrr-investment-strategy.html" style="color:#4361ee;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-sync-alt"></i> BRRRR</a>
+<a href="/dscr-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-shield-alt"></i> DSCR</a>
+<a href="/property-management-profit-calculator.html" style="color:#4361ee;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-building"></i> PM Profit</a>
+<a href="https://dereviankoandrey.github.io/luminary-product-hub/" style="color:#7b2ff7;text-decoration:none;margin:0 6px;font-size:.85rem"><i class="fas fa-rocket"></i> Full Suite</a>
+</div>
+
+<script src="/luminary-analytics.js"></script>
+<script>
+function calculate(){
+const P=parseFloat(document.getElementById('principal').value)||300000;
+const r=parseFloat(document.getElementById('rate').value)/100/12||0.005417;
+const n=parseInt(document.getElementById('term').value)*12||360;
+const extra=parseFloat(document.getElementById('extraPayment').value)||0;
+
+// Standard monthly payment: M = P * r * (1+r)^n / ((1+r)^n - 1)
+let monthly=0,totalInterestStandard=0,totalPaidStandard=0,monthsStandard=n;
+if(r>0){
+monthly=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+}else{
+monthly=P/n;
+}
+totalPaidStandard=monthly*n;
+totalInterestStandard=totalPaidStandard-P;
+
+// Accelerated payoff with extra payments
+let balance=P,schedule=[],yearPrincipal=0,yearInterest=0,totalExtra=0,payoffMonths=0,balances=[];
+for(let m=1;m<=Math.min(n*2,600);m++){
+const interestPayment=balance*r;
+const principalPayment=Math.min(monthly+extra-interestPayment,balance);
+if(principalPayment<=0)break;
+balance-=principalPayment;
+totalExtra+=extra;
+payoffMonths=m;
+
+yearPrincipal+=principalPayment;
+yearInterest+=interestPayment;
+
+if(m%12===0||balance<=0){
+balances.push({
+year:Math.ceil(m/12),
+principalPaid:yearPrincipal,
+interestPaid:yearInterest,
+totalPaid:yearPrincipal+yearInterest+(m/12-1)*extra,
+remainingBalance:Math.max(0,balance)
+});
+if(balance<=0){balance=0;break;}
+yearPrincipal=0;yearInterest=0;
+}
+
+if(balance<=0.01)break;
+}
+
+const totalPaidAccelerated=(monthly+extra)*payoffMonths-extra/12*(Math.floor(payoffMonths/12)-Math.ceil(balances.length));
+// Simpler: just sum actual payments made
+let actualTotalPaid=0;
+for(let i=0;i<balances.length;i++){
+if(i<balances.length-1){actualTotalPaid+=balances[i].totalPaid;}
+else{actualTotalPaid+=balances[i].principalPaid+balances[i].interestPaid+(payoffMonths%12)*(monthly+extra);}
+}
+
+// Better calculation: total paid = sum of all monthly payments (standard + extra) for payoff months
+const actualStandardTotal=monthly*n;
+const acceleratedPayments=[];
+let bal=P,accInterest=0,lastBalYear=0;
+for(let m=1;m<=Math.min(n*2,600);m++){
+const ip=Math.max(0,bal*r);
+const pp=Math.min(monthly+extra-ip,bal);
+if(pp<=0)break;
+bal-=pp;accInterest+=ip;
+if(m%12===0||bal<=0.01){
+acceleratedPayments.push({year:Math.ceil(m/12),principal:lastBalYear>0?Math.round(accInterest*0):null,interest:0,balance:bal});
+}
+if(bal<=0.01)break;
+}
+
+// Recalculate properly
+let bal2=P,sched=[],yrP=0,yrI=0;
+for(let m=1;m<=Math.min(n*3,720);m++){
+const ip=Math.max(0,bal2*r);
+const pp=Math.min(monthly+extra-ip,bal2);
+if(pp<=0)break;
+bal2-=pp;yrP+=pp;yrI+=ip;
+if(m%12===0||bal2<=0.01){
+sched.push({year:Math.ceil(m/12),principalPaid:Math.round(yrP*100)/100,interestPaid:Math.round(yrI*100)/100,totalPaid:Math.round((yrP+yrI)*100)/100,remainingBalance:Math.max(0,Math.round(bal2*100)/100)});
+if(bal2<=0.01)break;
+yrP=0;yrI=0;
+}
+}
+
+const totalInterestAccelerated=sched.reduce((s,e)=>s+e.interestPaid,0)+sched[sched.length-1].interestPaid*0; // recalc
+let actualAccInterest=0;for(const s of sched)actualAccInterest+=s.interestPaid;
+// Last year might be partial, but we included it above
+
+const interestSaved=Math.round((totalInterestStandard-actualAccInterest)*100)/100;
+const monthsSaved=n-payoffMonths;
+const yearsSaved=(monthsSaved/12).toFixed(1);
+const savingsPct=((interestSaved/totalInterestStandard)*100).toFixed(1);
+
+// Display results
+document.getElementById('resultsArea').style.display='block';
+
+const grid=document.getElementById('resultsGrid');
+grid.innerHTML=`
+<div class="result-card"><div class="result-label">Monthly Payment</div><div class="result-value">$${Math.round(monthly+extra).toLocaleString()}</div></div>
+<div class="result-card"><div class="result-label">Interest Saved</div><div class="result-value savings">$${interestSaved.toLocaleString()}</div></div>
+<div class="result-card"><div class="result-label">Time Saved</div><div class="result-value time-saved">${yearsSaved} yrs (${monthsSaved} mo)</div></div>
+<div class="result-card"><div class="result-label">Payoff in</div><div class="result-value" style="color:#4361ee">${Math.floor(payoffMonths/12)}y ${payoffMonths%12}m</div></div>
+`;
+
+// Comparison bars
+const maxInterest=Math.max(totalInterestStandard,actualAccInterest);
+document.getElementById('comparisonBars').innerHTML=`
+<div class="comparison-bar bar-standard">
+<span class="bar-label">Standard Payoff</span>
+<div class="bar-track"><div class="bar-fill" style="width:${(totalInterestStandard/maxInterest*100).toFixed(0)}%">$${Math.round(totalInterestStandard).toLocaleString()} interest</div></div>
+</div>
+<div class="comparison-bar bar-accelerated">
+<span class="bar-label">Accelerated Payoff</span>
+<div class="bar-track"><div class="bar-fill" style="width:${(actualAccInterest/maxInterest*100).toFixed(0)}%">$${Math.round(actualAccInterest).toLocaleString()} interest</div></div>
+</div>
+`;
+
+// Amortization table
+const tbody=document.getElementById('amortBody');
+tbody.innerHTML='';
+for(const s of sched){
+tbody.innerHTML+=`<tr><td>${s.year}</td><td>$${s.principalPaid.toLocaleString()}</td><td>$${s.interestPaid.toLocaleString()}</td><td>$${s.totalPaid.toLocaleString()}</td><td>$${s.remainingBalance.toLocaleString()}</td></tr>`;
+}
+
+// Scroll to results
+document.getElementById('resultsArea').scrollIntoView({behavior:'smooth'});
+}
+
+// Track page view
+if(typeof trackPageView==='function')trackPageView('loan-payoff-calculator');
+</script>
+</body>
+</html>
